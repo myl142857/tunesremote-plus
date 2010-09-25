@@ -1,4 +1,4 @@
-# MonkeyTunes For MediaMonkey Instructions
+# 'MonkeyTunes For MediaMonkey Instructions'
 
 = Introduction =
 
