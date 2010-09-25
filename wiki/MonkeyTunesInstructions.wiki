@@ -2,16 +2,14 @@
 
 == Introduction ==
 
-These instructions are for using TunesRemote+ with [http://melloware.com/products/monkeytunes/ MonkeyTunes for MediaMonkey]
+These instructions are for using [TunesRemote+] with [http://melloware.com/products/monkeytunes/ MonkeyTunes for MediaMonkey]
 
 http://melloware.com/images/monkeytunes-logo.png
 
 == Server Installation ==
 
    # Install the latest [http://www.mediamonkey.com/ MediaMonkey from Ventis Media].  Make sure at the end of the install to say YES when asked to run MediaMonkey.  This is important because the Installer runs as Administrator and installs the COM SDK that MonkeyTunes uses.  If you don't say yes you will get COM errors in the MonkeyTunes log.
-
    # Install the latest [http://melloware.com/products/monkeytunes/ MonkeyTunes] plugin for MediaMonkey from [http://melloware.com/ Melloware].
-
    # Run MediaMonkey normally.  You will see a new MonkeyTunes treenode in your MediaMonkey like the following screenshot:
 
 http://melloware.com/images/mt-connect.jpg
