@@ -1,4 +1,4 @@
-=MonkeyTunes For MediaMonkey Instructions=
+#summary MonkeyTunes For MediaMonkey Instructions
 
 == Introduction ==
 
