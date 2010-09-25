@@ -20,7 +20,7 @@ http://melloware.com/images/mt-connect.jpg
    # Run the TunesRemote+ application on your Android device.
    # Using Bonjour it will try and discover your running MonkeyTunes.  Give it a few seconds...
    # If it finds your MonkeyTunes click it then wait and in MediaMonkey you will see your device appear in the MonkeyTunes Treeview, simply click it and enter the 4 digit code!
-   # If it does *NOT* automatically find your library click Menu then choose "Manual"
+   # If MOnkeyTunes does *NOT* automatically find your library click the Menu button on your Android device and then choose "Manual"
    # Enter the IP Address of your PC running MonkeyTunes (e.g. 192.168.1.100) and for Pairing Code enter "1" and it should connect immediately!
 
 If you have trouble see our [http://forum.melloware.com/viewtopic.php?f=16&t=7703 MonkeyTunes Troubleshooting FAQ]
