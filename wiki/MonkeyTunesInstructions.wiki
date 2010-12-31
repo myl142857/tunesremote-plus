@@ -1,4 +1,5 @@
 #summary MonkeyTunes For MediaMonkey Instructions
+#labels Featured
 
 == Introduction ==
 
