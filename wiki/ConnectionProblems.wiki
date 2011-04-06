@@ -27,3 +27,7 @@ Still think its not your firewall?   Make sure the following Ports are allowed i
 Another common problem is users don't realize their Android device needs to be on the *SAME* WIFI connection as their server.   Sometimes they are accidentally connected to a neighbor's WIFI network, sometimes they are accidentally using their Android 3G connection.
 
 I will guarantee you will not get TunesRemote+ to work unless both the Android and Server app are on the same WIFI network.
+
+==Pairing Two Devices To One iTunes==
+
+If you are having trouble pairing two devices to the same iTunes instance you need to go into iTunes settings and tell it to "Forget all remembered remotes".  Then perform the pairing operation again and it will fix your issue.
