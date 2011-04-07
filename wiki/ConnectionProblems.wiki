@@ -22,6 +22,30 @@ Still think its not your firewall?   Make sure the following Ports are allowed i
   * TCP 1024
   * UDP 5353
 
+==Win7 Firewall Rules==
+
+It comes down to 5 - yes, 5 - firewall rules on Win 7.  Note:  this config does not represent the most secure firewall config possible, because I'm opening ports to all apps, semi-indiscriminately.  But it works... and it allows me to access the pure goodness of TunesRemote+
+
+1.) Launch Win 7 Firewall control panel snap-in; click on "Advanced Settings".  
+
+2.) Now, go to "Inbound Rules".  You will create two new Inbound Port rules:
+
+Create an Inbound Port rule for UDP port 5353.  Full control to everyone...
+Create an Inbound Port rule for TCP port 3689.  Full control to everyone...
+
+3.) Then, go to "Outbound Rules".  You will create three:
+
+Create an Outbound Port rule for UDP port 5353.  Full control to everyone...
+Create an Outbound Port rule for TCP port 3689.  Same as above...
+Create an Outbound Port rule for TCP port 1024.  Ditto...
+
+
+That's it.  You're fine now... but if you're not...
+
+4.) You DID forward ports in your router, correct?
+
+First, forward TCP port 3689, then forward UDP port 5353.  This is pretty easy on Cisco / Linksys equipment...
+
 ==WIFI Connection==
 
 Another common problem is users don't realize their Android device needs to be on the *SAME* WIFI connection as their server.   Sometimes they are accidentally connected to a neighbor's WIFI network, sometimes they are accidentally using their Android 3G connection.
