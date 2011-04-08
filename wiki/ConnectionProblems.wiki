@@ -22,6 +22,10 @@ Still think its not your firewall?   Make sure the following Ports are allowed i
   * TCP 1024
   * UDP 5353
 
+==Mac OSX Firewall Rules==
+
+Make sure to *reboot* after installing iTunes or any other software or changing the firewall rules listed in the Apple Support link above.
+
 ==Win7 Firewall Rules==
 
 It comes down to 5 - yes, 5 - firewall rules on Win 7.  Note:  this config does not represent the most secure firewall config possible, because I'm opening ports to all apps, semi-indiscriminately.  But it works... and it allows me to access the pure goodness of TunesRemote+
