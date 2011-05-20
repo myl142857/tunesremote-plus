@@ -59,3 +59,7 @@ I will guarantee you will not get TunesRemote+ to work unless both the Android a
 ==Pairing Two Devices To One iTunes==
 
 If you are having trouble pairing two devices to the same iTunes instance you need to go into iTunes settings and tell it to "Forget all remembered remotes".  Then perform the pairing operation again and it will fix your issue.
+
+==TunesRemote vs TunesRemote+==
+
+Some users have reported not being able to pair with iTunes using TunesRemote+ even though they could with the old TunesRemote.  A few users have reported success by uninstalling the old TunesRemote from their Android device.  Since TunesRemote+ is a fork of the original code there must be some conflict.
