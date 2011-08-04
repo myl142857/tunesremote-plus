@@ -54,6 +54,8 @@ First, forward TCP port 3689, then forward UDP port 5353.  This is pretty easy o
 
 Another common problem is users don't realize their Android device needs to be on the *SAME* WIFI connection as their server.   Sometimes they are accidentally connected to a neighbor's WIFI network, sometimes they are accidentally using their Android 3G connection.
 
+Also some routers do not allow your iTunes PC to be hardwired ethernet work with your WIFI connected mobile device.  Some routers by default block traffic between these two even though it is the same network on the same router.  Please see your router documentation on how to enabled sharing of Wired and Wireless connection traffic.
+
 I will guarantee you will not get TunesRemote+ to work unless both the Android and Server app are on the same WIFI network.
 
 ==Pairing Two Devices To One iTunes==
