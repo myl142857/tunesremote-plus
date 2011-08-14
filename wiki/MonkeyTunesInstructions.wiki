@@ -5,7 +5,7 @@
 
 These instructions are for using [TunesRemote+] with [http://melloware.com/products/monkeytunes/ MonkeyTunes for MediaMonkey]
 
-http://melloware.com/images/monkeytunes-logo.png
+http://tunesremote-plus.googlecode.com/svn/wiki/monkeytunes-logo.png
 
 == Server Installation ==
 
@@ -13,7 +13,7 @@ http://melloware.com/images/monkeytunes-logo.png
    # Install the latest [http://melloware.com/products/monkeytunes/ MonkeyTunes] plugin for MediaMonkey from [http://melloware.com/ Melloware].
    # Run MediaMonkey normally.  You will see a new MonkeyTunes treenode in your MediaMonkey like the following screenshot:
 
-http://melloware.com/images/mt-connect.jpg
+http://tunesremote-plus.googlecode.com/svn/wiki/mt-connect.jpg
 
 == Client Installation ==
 
