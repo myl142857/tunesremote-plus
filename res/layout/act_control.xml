@@ -128,43 +128,52 @@
 			>
 	
 			<LinearLayout
-				android:id="@+id/control_buttons"
-				android:layout_centerHorizontal="true"
-				android:layout_width="wrap_content" 
-				android:layout_height="wrap_content"
-				android:orientation="horizontal"
-				>
-				
-				<ImageButton
-					android:id="@+id/control_prev"
-					android:src="@android:drawable/ic_media_previous"
-					android:paddingLeft="30dip" android:paddingRight="30dip"
-					android:paddingTop="20dip" android:paddingBottom="20dip"
-					android:background="#00000000"
-					android:layout_width="wrap_content" 
-					android:layout_height="wrap_content"
-					/>
-			
-				<ImageButton
-					android:id="@+id/control_pause"
-					android:src="@android:drawable/ic_media_pause"
-					android:paddingLeft="30dip" android:paddingRight="30dip"
-					android:paddingTop="20dip" android:paddingBottom="20dip"
-					android:background="#00000000"
-					android:layout_width="wrap_content" 
-					android:layout_height="wrap_content"
-					/>
-		
-				<ImageButton
-					android:id="@+id/control_next"
-					android:src="@android:drawable/ic_media_next"
-					android:paddingLeft="30dip" android:paddingRight="30dip"
-					android:paddingTop="20dip" android:paddingBottom="20dip"
-					android:background="#00000000"
-					android:layout_width="wrap_content" 
-					android:layout_height="wrap_content"
-					/>
-		
+			    android:id="@+id/control_buttons"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:layout_centerHorizontal="true"
+			    android:orientation="horizontal"
+			    android:minHeight="72dip" >
+
+			    <ImageButton
+			        android:id="@+id/control_shuffle"
+			        android:layout_width="0dp"
+			        android:layout_height="match_parent"
+			        android:layout_weight="1"
+			        android:background="#00000000"
+			        android:src="@drawable/btn_shuffle_off" />
+
+			    <ImageButton
+			        android:id="@+id/control_prev"
+			        android:layout_width="0dp"
+			        android:layout_height="match_parent"
+			        android:layout_weight="1"
+			        android:background="#00000000"
+			        android:src="@android:drawable/ic_media_previous" />
+
+			    <ImageButton
+			        android:id="@+id/control_pause"
+			        android:layout_width="0dp"
+			        android:layout_height="match_parent"
+			        android:layout_weight="1"
+			        android:background="#00000000"
+			        android:src="@android:drawable/ic_media_pause" />
+
+			    <ImageButton
+			        android:id="@+id/control_next"
+			        android:layout_width="0dp"
+			        android:layout_height="match_parent"
+			        android:layout_weight="1"
+			        android:background="#00000000"
+			        android:src="@android:drawable/ic_media_next" />
+
+			    <ImageButton
+			        android:id="@+id/control_repeat"
+			        android:layout_width="0dp"
+			        android:layout_height="match_parent"
+			        android:layout_weight="1"
+			        android:background="#00000000"
+			        android:src="@drawable/btn_repeat_off" />
 			</LinearLayout>
 		
 		</RelativeLayout>

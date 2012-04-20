@@ -57,22 +57,29 @@ public class PlaylistsActivity extends BaseBrowseActivity {
    protected PlaylistsAdapter adapter;
 
    public ServiceConnection connection = new ServiceConnection() {
-      public void onServiceConnected(ComponentName className, IBinder service) {
-         try {
-            backend = ((BackendService.BackendBinder) service).getService();
-            session = backend.getSession();
+      public void onServiceConnected(ComponentName className, final IBinder service) {
+         new Thread(new Runnable() {
 
-            if (session == null)
-               return;
+			public void run() {
+				try {
+					backend = ((BackendService.BackendBinder) service)
+							.getService();
+					session = backend.getSession();
 
-            adapter.results.clear();
+					if (session == null)
+						return;
 
-            // begin search now that we have a backend
-            library = new Library(session);
-            library.readPlaylists(adapter);
-         } catch (Exception e) {
-            Log.e(TAG, "onServiceConnected:" + e.getMessage());
-         }
+					adapter.results.clear();
+
+					// begin search now that we have a backend
+					library = new Library(session);
+					library.readPlaylists(adapter);
+				} catch (Exception e) {
+					Log.e(TAG, "onServiceConnected:" + e.getMessage());
+				}
+			}
+
+		}).start();
 
       }
 

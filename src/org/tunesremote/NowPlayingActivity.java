@@ -69,22 +69,29 @@ public class NowPlayingActivity extends ListActivity {
    protected boolean iTunes = false;
 
    public ServiceConnection connection = new ServiceConnection() {
-      public void onServiceConnected(ComponentName className, IBinder service) {
-         try {
-            backend = ((BackendService.BackendBinder) service).getService();
-            session = backend.getSession();
+      public void onServiceConnected(ComponentName className, final IBinder service) {
+         new Thread(new Runnable() {
 
-            if (session == null)
-               return;
+			public void run() {
+				try {
+					backend = ((BackendService.BackendBinder) service)
+							.getService();
+					session = backend.getSession();
 
-            // begin search now that we have a backend
-            library = new Library(session);
+					if (session == null)
+						return;
 
-            // execute the Now Playing query for results
-            refreshNowPlaying();
-         } catch (Exception e) {
-            Log.e(TAG, "onServiceConnected:" + e.getMessage(), e);
-         }
+					// begin search now that we have a backend
+					library = new Library(session);
+
+					// execute the Now Playing query for results
+					refreshNowPlaying();
+				} catch (Exception e) {
+					Log.e(TAG, "onServiceConnected:" + e.getMessage(), e);
+				}
+			}
+
+		}).start();
       }
 
       public void onServiceDisconnected(ComponentName className) {
@@ -105,7 +112,7 @@ public class NowPlayingActivity extends ListActivity {
     * Execute the command to clear the server side cue.
     */
    public void clearCurrentCue() {
-      session.controlClearCue();
+		session.controlClearCue();
    }
 
    public Handler resultsUpdated = new Handler() {
@@ -143,14 +150,20 @@ public class NowPlayingActivity extends ListActivity {
       this.albumid = this.getIntent().getStringExtra(Intent.EXTRA_TITLE);
 
       this.getListView().setOnItemClickListener(new OnItemClickListener() {
-         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if (iTunes) {
-               session.controlPlayAlbum(albumid, position);
-            } else {
-               session.controlPlayIndex(albumid, position);
-            }
-            setResult(RESULT_OK, new Intent());
-            finish();
+         public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+            new Thread(new Runnable() {
+
+				public void run() {
+					if (iTunes) {
+						session.controlPlayAlbum(albumid, position);
+					} else {
+						session.controlPlayIndex(albumid, position);
+					}
+					setResult(RESULT_OK, new Intent());
+					finish();
+				}
+
+			}).start();
          }
       });
 
@@ -166,26 +179,42 @@ public class NowPlayingActivity extends ListActivity {
       refresh.setIcon(android.R.drawable.ic_menu_rotate);
       refresh.setOnMenuItemClickListener(new OnMenuItemClickListener() {
          public boolean onMenuItemClick(MenuItem item) {
-            try {
-               refreshNowPlaying();
-            } catch (Exception e) {
-               Log.d(TAG, String.format("Refresh Error: %s", e.getMessage()));
-            }
-            return true;
+            new Thread(new Runnable() {
+
+				public void run() {
+					try {
+						refreshNowPlaying();
+					} catch (Exception e) {
+						Log.d(TAG,
+								String.format("Refresh Error: %s",
+										e.getMessage()));
+					}
+				}
+
+			}).start();
+			return true;
          }
       });
       MenuItem clearcue = menu.add(R.string.control_menu_clearcue);
       clearcue.setIcon(android.R.drawable.ic_menu_revert);
       clearcue.setOnMenuItemClickListener(new OnMenuItemClickListener() {
          public boolean onMenuItemClick(MenuItem item) {
-            try {
-               clearCurrentCue();
-               Thread.sleep(250);
-               refreshNowPlaying();
-            } catch (Exception e) {
-               Log.d(TAG, String.format("Clear Cue Error: %s", e.getMessage()));
-            }
-            return true;
+            new Thread(new Runnable() {
+
+				public void run() {
+					try {
+						clearCurrentCue();
+						Thread.sleep(250);
+						refreshNowPlaying();
+					} catch (Exception e) {
+						Log.d(TAG,
+								String.format("Clear Cue Error: %s",
+										e.getMessage()));
+					}
+				}
+
+			}).start();
+			return true;
          }
       });
       return true;

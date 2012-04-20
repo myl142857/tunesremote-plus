@@ -141,8 +141,7 @@ public class Session {
       ThreadExecutor.runTask(new Runnable() {
          public void run() {
             RequestHelper.attemptRequest(url);
-            if (notify)
-               notifyStatus();
+            if (notify) notifyStatus();
          }
       });
    }

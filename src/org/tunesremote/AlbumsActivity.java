@@ -35,7 +35,6 @@ import org.tunesremote.daap.Library;
 import org.tunesremote.daap.RequestHelper;
 import org.tunesremote.daap.Response;
 import org.tunesremote.daap.Session;
-import org.tunesremote.util.ThreadExecutor;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -75,26 +74,29 @@ public class AlbumsActivity extends BaseBrowseActivity {
    protected Bitmap blank;
 
    public ServiceConnection connection = new ServiceConnection() {
-      public void onServiceConnected(ComponentName className, IBinder service) {
-         try {
-            backend = ((BackendService.BackendBinder) service).getService();
-            session = backend.getSession();
+      public void onServiceConnected(ComponentName className, final IBinder service) {
+         new Thread(new Runnable() {
 
-            if (session == null)
-               return;
+			public void run() {
+				try {
+					backend = ((BackendService.BackendBinder) service)
+							.getService();
+					session = backend.getSession();
 
-            adapter.results.clear();
+					if (session == null)
+						return;
 
-            // begin search now that we have a backend
-            library = new Library(session);
-            ThreadExecutor.runTask(new Runnable() {
-               public void run() {
-                  library.readAlbums(adapter, artist);
-               }
-            });
-         } catch (Exception e) {
-            Log.e(TAG, "onServiceConnected:" + e.getMessage());
-         }
+					adapter.results.clear();
+
+					// begin search now that we have a backend
+					library = new Library(session);
+					library.readAlbums(adapter, artist);
+				} catch (Exception e) {
+					Log.e(TAG, "onServiceConnected:" + e.getMessage());
+				}
+			}
+
+		}).start();
 
       }
 
@@ -233,10 +235,16 @@ public class AlbumsActivity extends BaseBrowseActivity {
 
       }
 
-      public void foundTag(String tag, Response resp) {
-         // add a found search result to our list
-         if (resp.containsKey("minm"))
-            results.add(resp);
+      public void foundTag(String tag, final Response resp) {
+         runOnUiThread(new Runnable() {
+
+			public void run() {
+				// add a found search result to our list
+				if (resp.containsKey("minm"))
+					results.add(resp);
+			}
+
+		});
       }
 
       public void searchDone() {

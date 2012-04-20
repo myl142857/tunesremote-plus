@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/control_menu_search"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="@string/control_menu_search">
+    </item>
+    <item
+        android:id="@+id/control_menu_artists"
+        android:icon="@drawable/ic_search_category_music_artist"
+        android:title="@string/control_menu_artists">
+    </item>
+    <item
+        android:id="@+id/control_menu_playlists"
+        android:icon="@drawable/ic_search_category_music_song"
+        android:title="@string/control_menu_playlists">
+    </item>
+    <item
+        android:id="@+id/control_menu_speakers"
+        android:icon="@android:drawable/ic_lock_silent_mode_off"
+        android:title="@string/control_menu_speakers"
+        android:visible="false">
+    </item>
+    <item
+        android:id="@+id/control_menu_add_library"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="@string/control_menu_addlibrary">
+    </item>
+    <item
+        android:id="@+id/control_menu_pick_library"
+        android:icon="@android:drawable/ic_menu_share"
+        android:title="@string/control_menu_picklibrary">
+    </item>
+    <item
+        android:id="@+id/control_menu_now_playing"
+        android:title="@string/control_menu_nowplaying">
+    </item>
+    <item
+        android:id="@+id/control_menu_settings"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:title="@string/control_menu_settings">
+    </item>
+    <item
+        android:id="@+id/control_menu_about"
+        android:icon="@android:drawable/ic_menu_info_details"
+        android:title="@string/control_menu_about">
+    </item>
+
+</menu>
