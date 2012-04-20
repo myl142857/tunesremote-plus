@@ -78,26 +78,34 @@ public class SearchActivity extends Activity {
    protected String query;
 
    public ServiceConnection connection = new ServiceConnection() {
-      public void onServiceConnected(ComponentName className, IBinder service) {
-         try {
-            backend = ((BackendService.BackendBinder) service).getService();
-            session = backend.getSession();
+      public void onServiceConnected(ComponentName className, final IBinder service) {
+         new Thread(new Runnable() {
 
-            if (session == null)
-               return;
+			public void run() {
+				try {
+					backend = ((BackendService.BackendBinder) service)
+							.getService();
+					session = backend.getSession();
 
-            // begin search now that we have a backend
-            library = new Library(session);
+					if (session == null)
+						return;
 
-            adapter = new SearchAdapter(SearchActivity.this, library, query);
-            adapter.triggerPage();
+					// begin search now that we have a backend
+					library = new Library(session);
 
-            list.setOnScrollListener(adapter);
-            list.addFooterView(adapter.footerView, null, false);
-            list.setAdapter(adapter);
-         } catch (Exception e) {
-            Log.e(TAG, "onServiceConnected:" + e.getMessage());
-         }
+					adapter = new SearchAdapter(SearchActivity.this, library,
+							query);
+					adapter.triggerPage();
+
+					list.setOnScrollListener(adapter);
+					list.addFooterView(adapter.footerView, null, false);
+					list.setAdapter(adapter);
+				} catch (Exception e) {
+					Log.e(TAG, "onServiceConnected:" + e.getMessage());
+				}
+			}
+
+		}).start();
 
       }
 

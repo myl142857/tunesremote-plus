@@ -43,7 +43,7 @@ public class FadeView extends RelativeLayout {
    public final static String TAG = FadeView.class.toString();
 
    protected boolean foundViews = false;
-   protected View info, seek, rating;
+   protected View info, seek, rating, shuffle, repeat;
 
    public boolean allowFade = true;
 
@@ -57,6 +57,10 @@ public class FadeView extends RelativeLayout {
          seek.startAnimation(fadeDown);
          rating.clearAnimation();
          rating.startAnimation(fadeDown);
+         shuffle.clearAnimation();
+         shuffle.startAnimation(fadeDown);
+         repeat.clearAnimation();
+         repeat.startAnimation(fadeDown);
       }
    };
 
@@ -95,6 +99,8 @@ public class FadeView extends RelativeLayout {
       this.info = this.findViewById(R.id.info_box);
       this.seek = this.findViewById(R.id.seek_box);
       this.rating = this.findViewById(R.id.rating_box);
+      this.shuffle = this.findViewById(R.id.control_shuffle);
+      this.repeat = this.findViewById(R.id.control_repeat);
       this.foundViews = true;
    }
 
@@ -174,6 +180,11 @@ public class FadeView extends RelativeLayout {
          seek.startAnimation(fadeUp);
          rating.clearAnimation();
          rating.startAnimation(fadeUp);
+         shuffle.clearAnimation();
+         shuffle.startAnimation(fadeUp);
+         repeat.clearAnimation();
+         repeat.startAnimation(fadeUp);
+         
       }
    }
 

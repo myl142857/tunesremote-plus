@@ -36,7 +36,6 @@
 		android:layout_height="wrap_content"
 		android:paddingRight="60dip"
 		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:textStyle="bold"
 		/>
 
 	<TextView
