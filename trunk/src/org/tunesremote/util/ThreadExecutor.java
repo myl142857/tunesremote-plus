@@ -41,7 +41,7 @@ import android.util.Log;
  */
 public class ThreadExecutor {
    private static final String TAG = ThreadExecutor.class.toString();
-   private static final int CORE_POOL_SIZE = 4;
+   private static final int CORE_POOL_SIZE = 5;
    private static final int MAXIMUM_POOL_SIZE = 50;
    private static final int KEEP_ALIVE = 10;
    private static final BlockingQueue<Runnable> sWorkQueue = new LinkedBlockingQueue<Runnable>(MAXIMUM_POOL_SIZE);
