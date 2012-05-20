@@ -191,6 +191,9 @@ public final class DNSIncoming extends DNSMessage {
         try {
             this.setId(_messageInputStream.readUnsignedShort());
             this.setFlags(_messageInputStream.readUnsignedShort());
+            if (this.getOperationCode() > 0) {
+                throw new IOException("Received a message with a non standard operation code. Currently unsupported in the specification.");
+            }
             int numQuestions = _messageInputStream.readUnsignedShort();
             int numAnswers = _messageInputStream.readUnsignedShort();
             int numAuthorities = _messageInputStream.readUnsignedShort();
@@ -233,6 +236,10 @@ public final class DNSIncoming extends DNSMessage {
                     }
                 }
             }
+            // We should have drained the entire stream by now
+            if (_messageInputStream.available() > 0) {
+                throw new IOException("Received a message with the wrong length.");
+            }
         } catch (Exception e) {
             logger.log(Level.WARNING, "DNSIncoming() dump " + print(true) + "\n exception ", e);
             // This ugly but some JVM don't implement the cause on IOException
@@ -249,23 +256,20 @@ public final class DNSIncoming extends DNSMessage {
         this._receivedTime = receivedTime;
     }
 
-
     /*
      * (non-Javadoc)
-     *
      * @see java.lang.Object#clone()
      */
     @Override
     public DNSIncoming clone() {
         DNSIncoming in = new DNSIncoming(this.getFlags(), this.getId(), this.isMulticast(), this._packet, this._receivedTime);
-         in._senderUDPPayload = this._senderUDPPayload;
-         in._questions.addAll(this._questions);
-         in._answers.addAll(this._answers);
-         in._authoritativeAnswers.addAll(this._authoritativeAnswers);
-         in._additionals.addAll(this._additionals);
-         return in;
+        in._senderUDPPayload = this._senderUDPPayload;
+        in._questions.addAll(this._questions);
+        in._answers.addAll(this._answers);
+        in._authoritativeAnswers.addAll(this._authoritativeAnswers);
+        in._additionals.addAll(this._additionals);
+        return in;
     }
-
 
     private DNSQuestion readQuestion() {
         String domain = _messageInputStream.readName();
