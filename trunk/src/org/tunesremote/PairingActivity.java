@@ -27,6 +27,7 @@ package org.tunesremote;
 
 import java.io.IOException;
 import java.util.Hashtable;
+import java.util.UUID;
 
 import javax.jmdns.ServiceInfo;
 
@@ -34,11 +35,13 @@ import org.tunesremote.daap.PairingServer;
 import org.tunesremote.util.ThreadExecutor;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 public class PairingActivity extends Activity {
@@ -89,8 +92,27 @@ public class PairingActivity extends Activity {
       values.put("txtvers", "1");
       values.put("Pair", "0000000000000001");
 
-      // NOTE: this "Pair" above is *not* the guid--we generate and return that in PairingServer
-      pairservice = ServiceInfo.create(LibraryActivity.REMOTE_TYPE, "0000000000000000000000000000000000000006", PairingServer.PORT, 0, 0, values);
+      String deviceId = "0000000000000000000000000000000000000006";
+      try {
+         // generate unique 40 digit device ID which is what the iPhone does
+         final TelephonyManager tm = (TelephonyManager) getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
+         final String tmDevice, tmSerial, androidId;
+         tmDevice = "" + tm.getDeviceId();
+         tmSerial = "" + tm.getSimSerialNumber();
+         androidId = ""
+                  + android.provider.Settings.Secure.getString(getContentResolver(),
+                           android.provider.Settings.Secure.ANDROID_ID);
+
+         final UUID deviceUuid = new UUID(androidId.hashCode(), ((long) tmDevice.hashCode() << 32)
+                  | tmSerial.hashCode());
+         deviceId = deviceUuid.toString();
+      } catch (Exception ex) {
+         Log.w(TAG, ex);
+      }
+
+      // NOTE: this "Pair" above is *not* the guid--we generate and return that
+      // in PairingServer
+      pairservice = ServiceInfo.create(LibraryActivity.REMOTE_TYPE, deviceId, PairingServer.PORT, 0, 0, values);
    }
 
    @Override
