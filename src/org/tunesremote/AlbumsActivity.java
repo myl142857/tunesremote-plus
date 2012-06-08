@@ -77,26 +77,25 @@ public class AlbumsActivity extends BaseBrowseActivity {
       public void onServiceConnected(ComponentName className, final IBinder service) {
          new Thread(new Runnable() {
 
-			public void run() {
-				try {
-					backend = ((BackendService.BackendBinder) service)
-							.getService();
-					session = backend.getSession();
+            public void run() {
+               try {
+                  backend = ((BackendService.BackendBinder) service).getService();
+                  session = backend.getSession();
 
-					if (session == null)
-						return;
+                  if (session == null)
+                     return;
 
-					adapter.results.clear();
+                  adapter.results.clear();
 
-					// begin search now that we have a backend
-					library = new Library(session);
-					library.readAlbums(adapter, artist);
-				} catch (Exception e) {
-					Log.e(TAG, "onServiceConnected:" + e.getMessage());
-				}
-			}
+                  // begin search now that we have a backend
+                  library = new Library(session);
+                  library.readAlbums(adapter, artist);
+               } catch (Exception e) {
+                  Log.e(TAG, "onServiceConnected:" + e.getMessage());
+               }
+            }
 
-		}).start();
+         }).start();
 
       }
 
@@ -238,13 +237,13 @@ public class AlbumsActivity extends BaseBrowseActivity {
       public void foundTag(String tag, final Response resp) {
          runOnUiThread(new Runnable() {
 
-			public void run() {
-				// add a found search result to our list
-				if (resp.containsKey("minm"))
-					results.add(resp);
-			}
+            public void run() {
+               // add a found search result to our list
+               if (resp.containsKey("minm"))
+                  results.add(resp);
+            }
 
-		});
+         });
       }
 
       public void searchDone() {
@@ -284,14 +283,16 @@ public class AlbumsActivity extends BaseBrowseActivity {
                convertView = this.inflater.inflate(R.layout.item_album, parent, false);
                Response child = (Response) this.getItem(position);
                String title = child.getString("minm");
-               String caption = AlbumsActivity.this.getResources().getString(R.string.albums_album_caption, child.getNumberLong("mimc"));
+               String caption = AlbumsActivity.this.getResources().getString(R.string.albums_album_caption,
+                        child.getNumberLong("mimc"));
 
                ((TextView) convertView.findViewById(android.R.id.text1)).setText(title);
                ((TextView) convertView.findViewById(android.R.id.text2)).setText(caption);
 
                // go load image art
                ((ImageView) convertView.findViewById(android.R.id.icon)).setImageBitmap(blank);
-               new LoadPhotoTask().execute(Integer.valueOf(position), Integer.valueOf((int) child.getNumberLong("miid")));
+               new LoadPhotoTask().execute(Integer.valueOf(position),
+                        Integer.valueOf((int) child.getNumberLong("miid")));
             }
          } catch (Exception e) {
             Log.w(TAG, "getView:" + e.getMessage());
@@ -325,7 +326,8 @@ public class AlbumsActivity extends BaseBrowseActivity {
             } else {
 
                // fetch the album cover from itunes
-               byte[] raw = RequestHelper.request(String.format("%s/databases/%d/groups/%d/extra_data/artwork?session-id=%s&mw=55&mh=55&group-type=albums",
+               byte[] raw = RequestHelper.request(String.format(
+                        "%s/databases/%d/groups/%d/extra_data/artwork?session-id=%s&mw=55&mh=55&group-type=albums",
                         session.getRequestBase(), session.databaseId, itemid, session.sessionId), false);
                bitmap = BitmapFactory.decodeByteArray(raw, 0, raw.length);
 
@@ -348,15 +350,18 @@ public class AlbumsActivity extends BaseBrowseActivity {
 
       @Override
       protected void onPostExecute(Object[] result) {
-         // update gui to show the newly-fetched albumart
-         int position = ((Integer) result[0]).intValue();
-         Bitmap bitmap = (Bitmap) result[1];
-
-         // skip if bitmap wasnt found
-         if (bitmap == null)
-            return;
-
          try {
+            if (result == null) {
+               return;
+            }
+            // update gui to show the newly-fetched albumart
+            final int position = ((Integer) result[0]).intValue();
+            final Bitmap bitmap = (Bitmap) result[1];
+
+            // skip if bitmap wasnt found
+            if (bitmap == null)
+               return;
+
             // skip updating this item if outside of bounds
             if (position < list.getFirstVisiblePosition() || position > list.getLastVisiblePosition())
                return;

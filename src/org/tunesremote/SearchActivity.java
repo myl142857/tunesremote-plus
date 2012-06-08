@@ -81,31 +81,29 @@ public class SearchActivity extends Activity {
       public void onServiceConnected(ComponentName className, final IBinder service) {
          new Thread(new Runnable() {
 
-			public void run() {
-				try {
-					backend = ((BackendService.BackendBinder) service)
-							.getService();
-					session = backend.getSession();
+            public void run() {
+               try {
+                  backend = ((BackendService.BackendBinder) service).getService();
+                  session = backend.getSession();
 
-					if (session == null)
-						return;
+                  if (session == null)
+                     return;
 
-					// begin search now that we have a backend
-					library = new Library(session);
+                  // begin search now that we have a backend
+                  library = new Library(session);
 
-					adapter = new SearchAdapter(SearchActivity.this, library,
-							query);
-					adapter.triggerPage();
+                  adapter = new SearchAdapter(SearchActivity.this, library, query);
+                  adapter.triggerPage();
 
-					list.setOnScrollListener(adapter);
-					list.addFooterView(adapter.footerView, null, false);
-					list.setAdapter(adapter);
-				} catch (Exception e) {
-					Log.e(TAG, "onServiceConnected:" + e.getMessage());
-				}
-			}
+                  list.setOnScrollListener(adapter);
+                  list.addFooterView(adapter.footerView, null, false);
+                  list.setAdapter(adapter);
+               } catch (Exception e) {
+                  Log.e(TAG, "onServiceConnected:" + e.getMessage());
+               }
+            }
 
-		}).start();
+         }).start();
 
       }
 
@@ -180,7 +178,8 @@ public class SearchActivity extends Activity {
       // this.query = "jes";
 
       // store search in recent history
-      SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, RecentProvider.AUTHORITY, RecentProvider.MODE);
+      SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, RecentProvider.AUTHORITY,
+               RecentProvider.MODE);
       suggestions.saveRecentQuery(query, null);
 
       this.blank = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
@@ -315,7 +314,8 @@ public class SearchActivity extends Activity {
             ThreadExecutor.runTask(new Runnable() {
                public void run() {
                   Log.d(TAG, "getView() is triggering a new page to be loaded");
-                  int count = Integer.parseInt(backend.getPrefs().getString(getResources().getString(R.string.pref_searchmax), "30"));
+                  int count = Integer.parseInt(backend.getPrefs().getString(
+                           getResources().getString(R.string.pref_searchmax), "30"));
                   totalResults = library.readSearch(SearchAdapter.this, search, getCount(), count);
                   if (totalResults <= 0) {
                      Log.w(TAG, "No Search Results Found!");
@@ -358,8 +358,9 @@ public class SearchActivity extends Activity {
          }
 
          /*
-          * mlit --+ mikd 1 02 == 2 asal 11 B Collision asar 18 David Crowder Band miid 4 00000d96 == 3478 minm 59 Be
-          * Lifted Or Hope Rising (w/Shane & Shane/Robbie Seay Band)
+          * mlit --+ mikd 1 02 == 2 asal 11 B Collision asar 18 David Crowder
+          * Band miid 4 00000d96 == 3478 minm 59 Be Lifted Or Hope Rising
+          * (w/Shane & Shane/Robbie Seay Band)
           */
 
          // inflate views as needed
@@ -457,26 +458,29 @@ public class SearchActivity extends Activity {
 
       @Override
       protected void onPostExecute(Object[] result) {
+         try {
+            if (result == null || result.length == 0)
+               return;
 
-         if (result.length == 0)
-            return;
+            // update gui to show the newly-fetched albumart
+            int position = ((Integer) result[0]).intValue();
+            Bitmap bitmap = (Bitmap) result[1];
 
-         // update gui to show the newly-fetched albumart
-         int position = ((Integer) result[0]).intValue();
-         Bitmap bitmap = (Bitmap) result[1];
+            // skip if bitmap wasnt found
+            if (bitmap == null)
+               return;
 
-         // skip if bitmap wasnt found
-         if (bitmap == null)
-            return;
+            // skip updating this item if outside of bounds
+            if (position < list.getFirstVisiblePosition() || position > list.getLastVisiblePosition())
+               return;
 
-         // skip updating this item if outside of bounds
-         if (position < list.getFirstVisiblePosition() || position > list.getLastVisiblePosition())
-            return;
-
-         // find actual position and update view
-         int visible = position - list.getFirstVisiblePosition();
-         View view = list.getChildAt(visible);
-         ((ImageView) view.findViewById(android.R.id.icon)).setImageBitmap(bitmap);
+            // find actual position and update view
+            int visible = position - list.getFirstVisiblePosition();
+            View view = list.getChildAt(visible);
+            ((ImageView) view.findViewById(android.R.id.icon)).setImageBitmap(bitmap);
+         } catch (Exception e) {
+            Log.w(TAG, String.format("onPostExecute Error: %s", e.getMessage()));
+         }
 
       }
    }
