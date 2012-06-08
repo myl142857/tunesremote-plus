@@ -235,6 +235,10 @@ public class AlbumsActivity extends BaseBrowseActivity {
       }
 
       public void foundTag(String tag, final Response resp) {
+         if (resp == null) {
+            return;
+         }
+
          runOnUiThread(new Runnable() {
 
             public void run() {

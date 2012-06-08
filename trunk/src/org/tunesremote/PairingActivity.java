@@ -25,7 +25,6 @@
 
 package org.tunesremote;
 
-import java.io.IOException;
 import java.util.Hashtable;
 import java.util.UUID;
 
@@ -125,7 +124,7 @@ public class PairingActivity extends Activity {
                Log.i(TAG, "Starting PairingServer...");
                pairingServer.start();
                LibraryActivity.getZeroConf().registerService(pairservice);
-            } catch (IOException ex) {
+            } catch (Exception ex) {
                Log.w(TAG, ex);
             }
          }
@@ -139,10 +138,14 @@ public class PairingActivity extends Activity {
 
       ThreadExecutor.runTask(new Runnable() {
          public void run() {
-            Log.i(TAG, "Stopping PairingServer...");
-            pairingServer.destroy();
-            pairingServer = null;
-            LibraryActivity.getZeroConf().unregisterService(pairservice);
+            try {
+               Log.i(TAG, "Stopping PairingServer...");
+               pairingServer.destroy();
+               pairingServer = null;
+               LibraryActivity.getZeroConf().unregisterService(pairservice);
+            } catch (Exception e) {
+               Log.e(TAG, "Pairing OnStop:" + e.getMessage());
+            }
          }
       });
 

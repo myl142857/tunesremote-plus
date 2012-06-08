@@ -146,7 +146,7 @@ public class PairingServer extends Thread {
          }
 
          Log.i(TAG, "PairingServer thread stopped...");
-      } catch (IOException e) {
+      } catch (Exception e) {
          Log.w(TAG, e);
       }
 

@@ -32,6 +32,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -184,7 +185,7 @@ public class FadeView extends RelativeLayout {
          shuffle.startAnimation(fadeUp);
          repeat.clearAnimation();
          repeat.startAnimation(fadeUp);
-         
+
       }
    }
 
@@ -199,9 +200,13 @@ public class FadeView extends RelativeLayout {
       this.fadeTimer.schedule(new TimerTask() {
          @Override
          public void run() {
-            if (state.equals(AnimationState.FADING_UP) || state.equals(AnimationState.VISIBLE)) {
-               state = AnimationState.FADING_DOWN;
-               fadeDownHandler.sendEmptyMessage(-1);
+            try {
+               if (state.equals(AnimationState.FADING_UP) || state.equals(AnimationState.VISIBLE)) {
+                  state = AnimationState.FADING_DOWN;
+                  fadeDownHandler.sendEmptyMessage(-1);
+               }
+            } catch (Exception e) {
+               Log.e(TAG, "FadeView Exception:" + e.getMessage());
             }
          }
       }, FADE_DELAY);

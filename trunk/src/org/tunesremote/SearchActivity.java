@@ -313,17 +313,21 @@ public class SearchActivity extends Activity {
          if (this.totalResults > this.getCount()) {
             ThreadExecutor.runTask(new Runnable() {
                public void run() {
-                  Log.d(TAG, "getView() is triggering a new page to be loaded");
-                  int count = Integer.parseInt(backend.getPrefs().getString(
-                           getResources().getString(R.string.pref_searchmax), "30"));
-                  totalResults = library.readSearch(SearchAdapter.this, search, getCount(), count);
-                  if (totalResults <= 0) {
-                     Log.w(TAG, "No Search Results Found!");
-                     resultsUpdated.sendEmptyMessage(NO_RESULTS_FOUND);
-                  } else {
-                     Log.w(TAG, String.format("Search Results Found Count = %d", totalResults));
-                     // change our footer view to say no more results
-                     resultsUpdated.sendEmptyMessage(REMOVE_FOOTER);
+                  try {
+                     Log.d(TAG, "getView() is triggering a new page to be loaded");
+                     int count = Integer.parseInt(backend.getPrefs().getString(
+                              getResources().getString(R.string.pref_searchmax), "30"));
+                     totalResults = library.readSearch(SearchAdapter.this, search, getCount(), count);
+                     if (totalResults <= 0) {
+                        Log.w(TAG, "No Search Results Found!");
+                        resultsUpdated.sendEmptyMessage(NO_RESULTS_FOUND);
+                     } else {
+                        Log.w(TAG, String.format("Search Results Found Count = %d", totalResults));
+                        // change our footer view to say no more results
+                        resultsUpdated.sendEmptyMessage(REMOVE_FOOTER);
+                     }
+                  } catch (Exception e) {
+                     Log.e(TAG, "Search Exception:" + e.getMessage());
                   }
                }
             });
