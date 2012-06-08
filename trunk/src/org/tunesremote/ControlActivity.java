@@ -452,6 +452,9 @@ public class ControlActivity extends Activity {
       }
 
       public int getCount() {
+         if (speakers == null) {
+            return 0;
+         }
          return speakers.size();
       }
 
@@ -654,7 +657,7 @@ public class ControlActivity extends Activity {
 
          public void onStopTrackingTouch(SeekBar seekBar) {
             dragging = false;
-            if (session == null) {
+            if (session == null || seekBar == null || vibrator == null) {
                return;
             }
 

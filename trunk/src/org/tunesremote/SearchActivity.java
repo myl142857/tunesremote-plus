@@ -155,13 +155,17 @@ public class SearchActivity extends Activity {
    @Override
    public void onStop() {
       super.onStop();
-      this.unbindService(connection);
+      try {
+         this.unbindService(connection);
 
-      // make sure that we release usertask
-      // UserTask.resume();
-      synchronized (adapter.scrollWait) {
-         adapter.scrolling = false;
-         adapter.scrollWait.notifyAll();
+         // make sure that we release usertask
+         // UserTask.resume();
+         synchronized (adapter.scrollWait) {
+            adapter.scrolling = false;
+            adapter.scrollWait.notifyAll();
+         }
+      } catch (Exception e) {
+         Log.e(TAG, "SearchActivity OnStop Exception:" + e.getMessage());
       }
 
    }
