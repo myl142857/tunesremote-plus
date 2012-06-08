@@ -173,9 +173,7 @@ public class ControlActivity extends Activity {
       public void onServiceDisconnected(ComponentName className) {
          // make sure we clean up our handler-specific status
          Log.w(TAG, "onServiceDisconnected");
-
          status.updateHandler(null);
-
          backend = null;
          status = null;
       }
@@ -254,13 +252,6 @@ public class ControlActivity extends Activity {
 
          checkShuffle();
          checkRepeat();
-
-         // if (msg.what == Status.UPDATE_TRACK) {
-         // NotificationManager ns = (NotificationManager)
-         // ControlActivity.this.getSystemService(NOTIFICATION_SERVICE);
-         // Notification n = initNotification();
-         // if (n != null) ns.notify(NOTIFICATION_CONTROL, n);
-         // }
       }
    };
 
@@ -305,10 +296,14 @@ public class ControlActivity extends Activity {
       new Thread(new Runnable() {
 
          public void run() {
-            // launch tracks view for current album
-            Intent intent = new Intent(ControlActivity.this, NowPlayingActivity.class);
-            intent.putExtra(Intent.EXTRA_TITLE, status.getAlbumId());
-            ControlActivity.this.startActivity(intent);
+            try {
+               // launch tracks view for current album
+               Intent intent = new Intent(ControlActivity.this, NowPlayingActivity.class);
+               intent.putExtra(Intent.EXTRA_TITLE, status.getAlbumId());
+               ControlActivity.this.startActivity(intent);
+            } catch (Exception e) {
+               Log.e(TAG, "StartNowPlaying:" + e.getMessage());
+            }
          }
 
       }).start();
@@ -860,9 +855,13 @@ public class ControlActivity extends Activity {
 
                @Override
                public void run() {
-                  ControlActivity.this.volumeBar.setProgress((int) ControlActivity.this.cachedVolume);
-                  ControlActivity.this.volume.invalidate();
-                  ControlActivity.this.volumeToast.show();
+                  try {
+                     ControlActivity.this.volumeBar.setProgress((int) ControlActivity.this.cachedVolume);
+                     ControlActivity.this.volume.invalidate();
+                     ControlActivity.this.volumeToast.show();
+                  } catch (Exception e) {
+                     Log.e(TAG, "Volume Increment Exception:" + e.getMessage());
+                  }
                }
 
             });
@@ -982,26 +981,6 @@ public class ControlActivity extends Activity {
          showDialog(DIALOG_SPEAKERS);
          return true;
 
-         /*
-          * case R.id.control_menu_repeat: if (session == null || status ==
-          * null) return true; // correctly rotate through states switch
-          * (status.getRepeat()) { case Status.REPEAT_ALL:
-          * session.controlRepeat(Status.REPEAT_OFF);
-          * repeatToast.setText(R.string.control_menu_repeat_none); break; case
-          * Status.REPEAT_OFF: session.controlRepeat(Status.REPEAT_SINGLE);
-          * repeatToast.setText(R.string.control_menu_repeat_one); break; case
-          * Status.REPEAT_SINGLE: session.controlRepeat(Status.REPEAT_ALL);
-          * repeatToast.setText(R.string.control_menu_repeat_all); break; }
-          * repeatToast.show(); return true; case R.id.control_menu_shuffle: if
-          * (session == null || status == null) return true; // correctly rotate
-          * through states switch (status.getShuffle()) { case
-          * Status.SHUFFLE_OFF: session.controlShuffle(Status.SHUFFLE_ON);
-          * shuffleToast.setText(R.string.control_menu_shuffle_off); break; case
-          * Status.SHUFFLE_ON: session.controlShuffle(Status.SHUFFLE_OFF);
-          * shuffleToast.setText(R.string.control_menu_shuffle_on); break; }
-          * shuffleToast.show(); return true;
-          */
-
       case R.id.control_menu_add_library:
          startActivity(new Intent(ControlActivity.this, LibraryActivity.class));
          return true;
@@ -1053,14 +1032,14 @@ public class ControlActivity extends Activity {
 
       @Override
       public void run() {
-         speakers = status.getSpeakers();
-         if (mSpeakersItem != null)
-            mSpeakersItem.setVisible(speakers.size() > 1);
+         try {
+            speakers = status.getSpeakers();
+            if (mSpeakersItem != null)
+               mSpeakersItem.setVisible(speakers.size() > 1);
+         } catch (Exception e) {
+            Log.e(TAG, "Speaker Exception:" + e.getMessage());
+         }
       }
 
    }
-
-   // public static boolean hasActionBar = Build.VERSION.SDK_INT >=
-   // Build.VERSION_CODES.HONEYCOMB;
-
 }

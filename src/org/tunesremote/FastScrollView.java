@@ -34,16 +34,17 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup.OnHierarchyChangeListener;
 import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.Adapter;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.HeaderViewListAdapter;
 import android.widget.ListView;
-import android.widget.AbsListView.OnScrollListener;
 
 /**
  * FastScrollView is meant for embedding {@link ListView}s that contain a large
@@ -430,18 +431,22 @@ public class FastScrollView extends FrameLayout implements OnScrollListener, OnH
       }
 
       public void run() {
-         if (!mStarted) {
-            startFade();
-            invalidate();
-         }
+         try {
+            if (!mStarted) {
+               startFade();
+               invalidate();
+            }
 
-         if (getAlpha() > 0) {
-            final int y = mThumbY;
-            final int viewWidth = getWidth();
-            invalidate(viewWidth - mThumbW, y, viewWidth, y + mThumbH);
-         } else {
-            mStarted = false;
-            removeThumb();
+            if (getAlpha() > 0) {
+               final int y = mThumbY;
+               final int viewWidth = getWidth();
+               invalidate(viewWidth - mThumbW, y, viewWidth, y + mThumbH);
+            } else {
+               mStarted = false;
+               removeThumb();
+            }
+         } catch (Exception e) {
+            Log.e("FastScrollView", "FastScrollView:" + e.getMessage());
          }
       }
    }
