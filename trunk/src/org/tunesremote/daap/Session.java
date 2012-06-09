@@ -335,6 +335,23 @@ public class Session {
       });
    }
 
+   public void controlPlayTrack(final String trackId) {
+      ThreadExecutor.runTask(new Runnable() {
+         public void run() {
+            try {
+               RequestHelper.attemptRequest(String.format("%s/ctrl-int/1/cue?command=clear&session-id=%s",
+                        getRequestBase(), sessionId));
+               RequestHelper.attemptRequest(String.format(
+                        "%s/ctrl-int/1/cue?command=play&query='dmap.itemid:%s'&session-id=%s", getRequestBase(),
+                        trackId, sessionId));
+               notifyStatus();
+            } catch (Exception e) {
+               Log.w(TAG, "Session Exception:" + e.getMessage());
+            }
+         }
+      });
+   }
+
    public void controlPlaySearch(final String search, final int index) {
       // /ctrl-int/1/cue?command=play&query=(('com.apple.itunes.mediakind:1','com.apple.itunes.mediakind:4','com.apple.itunes.mediakind:8')+'dmap.itemname:*F*')&index=4&sort=name&session-id=1550976127
       final String encodedSearch = Library.escapeUrlString(search);
