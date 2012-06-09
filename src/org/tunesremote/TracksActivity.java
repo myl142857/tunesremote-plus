@@ -147,7 +147,6 @@ public class TracksActivity extends BaseBrowseActivity {
       this.artist = this.getIntent().getStringExtra("Artist");
       this.playlistId = this.getIntent().getStringExtra("Playlist");
       this.playlistPersistentId = this.getIntent().getStringExtra("PlaylistPersistentId");
-      // this.albumid = "11588692627249261480";
 
       this.registerForContextMenu(this.getListView());
 
@@ -193,7 +192,7 @@ public class TracksActivity extends BaseBrowseActivity {
          // create context menu to play entire artist
          final Response resp = (Response) adapter.getItem(info.position);
          menu.setHeaderTitle(resp.getString("minm"));
-         final String trackid = resp.getNumberString("miid");
+         final String trackId = resp.getNumberString("miid");
          final String containerItemId = resp.getNumberHex("mcti");
          if (TracksActivity.this.playlistId != null) {
             MenuItem play = menu.add(R.string.playlists_menu_play);
@@ -208,9 +207,7 @@ public class TracksActivity extends BaseBrowseActivity {
             final MenuItem queue = menu.add(R.string.tracks_menu_queue);
             queue.setOnMenuItemClickListener(new OnMenuItemClickListener() {
                public boolean onMenuItemClick(MenuItem item) {
-                  session.controlQueueTrack(trackid);
-                  TracksActivity.this.setResult(RESULT_OK, new Intent());
-                  TracksActivity.this.finish();
+                  session.controlQueueTrack(trackId);
                   return true;
                }
             });
@@ -230,8 +227,6 @@ public class TracksActivity extends BaseBrowseActivity {
             queue.setOnMenuItemClickListener(new OnMenuItemClickListener() {
                public boolean onMenuItemClick(MenuItem item) {
                   session.controlQueueArtist(artist);
-                  TracksActivity.this.setResult(RESULT_OK, new Intent());
-                  TracksActivity.this.finish();
                   return true;
                }
             });
@@ -239,7 +234,7 @@ public class TracksActivity extends BaseBrowseActivity {
             final MenuItem play = menu.add(R.string.tracks_menu_play);
             play.setOnMenuItemClickListener(new OnMenuItemClickListener() {
                public boolean onMenuItemClick(MenuItem item) {
-                  session.controlPlayAlbum(albumid, info.position);
+                  session.controlPlayTrack(trackId);
                   TracksActivity.this.setResult(RESULT_OK, new Intent());
                   TracksActivity.this.finish();
                   return true;
@@ -249,9 +244,7 @@ public class TracksActivity extends BaseBrowseActivity {
             final MenuItem queue = menu.add(R.string.tracks_menu_queue);
             queue.setOnMenuItemClickListener(new OnMenuItemClickListener() {
                public boolean onMenuItemClick(MenuItem item) {
-                  session.controlQueueTrack(trackid);
-                  TracksActivity.this.setResult(RESULT_OK, new Intent());
-                  TracksActivity.this.finish();
+                  session.controlQueueTrack(trackId);
                   return true;
                }
             });
@@ -267,7 +260,6 @@ public class TracksActivity extends BaseBrowseActivity {
 
       protected Context context;
       protected LayoutInflater inflater;
-
       protected List<Response> results = new LinkedList<Response>();
 
       public TracksAdapter(Context context) {
@@ -278,7 +270,6 @@ public class TracksActivity extends BaseBrowseActivity {
 
       public void foundTag(String tag, final Response resp) {
          // Now that we do all the tag reading on a background thread, this must
-         // be
          // performed on the UI thread
          runOnUiThread(new Runnable() {
 
