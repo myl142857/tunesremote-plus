@@ -116,4 +116,5 @@
   <string name="wifi_disabled">Please make sure to turn on your wifi in Settings.</string>
   <string name="no_network_title">No wifi connection</string>
   <string name="no_network">Currently not connected to a wifi network. Please check your wifi settings.</string>
+  <string name="loading">Loading...</string>
 </resources>

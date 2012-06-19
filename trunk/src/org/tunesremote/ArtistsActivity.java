@@ -25,6 +25,7 @@
 
 package org.tunesremote;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -50,6 +51,8 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -110,6 +113,8 @@ public class ArtistsActivity extends BaseBrowseActivity {
          adapter.notifyDataSetChanged();
          // our cached sections aren't valid any more, wipe and recreate them
          cachedSections = new SparseArray<Integer>(26);
+         Animation fadeDown = AnimationUtils.loadAnimation(ArtistsActivity.this, R.anim.fade_down);
+         findViewById(R.id.loading_frame).startAnimation(fadeDown);
          // createIndexPositions();
       }
    };
@@ -133,8 +138,9 @@ public class ArtistsActivity extends BaseBrowseActivity {
    @Override
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
-      setContentView(R.layout.gen_list_fast);
-
+      setContentView(R.layout.gen_list);
+      findViewById(R.id.loading_frame).setVisibility(View.VISIBLE);
+      
       ((TextView) this.findViewById(android.R.id.empty)).setText(R.string.artists_empty);
 
       this.adapter = new ArtistsAdapter(this);
@@ -212,41 +218,6 @@ public class ArtistsActivity extends BaseBrowseActivity {
          return ' ';
       return adapter.nice.get(index).charAt(0);
    }
-
-   // /**
-   // * A second method of creating the FastScroll data, because the one below
-   // seems to sometimes get it wrong
-   // */
-   // public void createIndexPositions() {
-   //
-   // new Thread(new Runnable() {
-   //
-   // @Override
-   // public void run() {
-   //
-   // int count = adapter.getCount();
-   // int charIndex = 25;
-   // int positionOfLatest = count - 1;
-   // char charact = adapter.alphabetSections[charIndex];
-   // if (cachedSections == null) cachedSections = new SparseArray<Integer>(26);
-   //
-   // for (int i = count - 1; i > -1; i--) {
-   //
-   // // Going backwards, we find the final (i.e. first) instance of a letter
-   // // and place that in our cachedSections array
-   // if (startsWith(i) != charact) {
-   // // We've hit the next character down
-   // cachedSections.put(charIndex, i + 1);
-   // charIndex--;
-   // charact = adapter.alphabetSections[charIndex];
-   // }
-   // }
-   //
-   // }
-   //
-   // }).start();
-   //
-   // }
 
    /**
     * perform a smart search where we "guess" the approximate letter location
@@ -342,10 +313,6 @@ public class ArtistsActivity extends BaseBrowseActivity {
 
    }
 
-   // public void scrollAlpha(char prefix) {
-   // this.getListView().setSelectionFromTop(walkToLetter(prefix), 0);
-   // }
-
    public class ArtistsAdapter extends BaseAdapter implements TagListener, SectionIndexer {
 
       protected Context context;
@@ -353,7 +320,7 @@ public class ArtistsActivity extends BaseBrowseActivity {
 
       protected List<Response> results = new LinkedList<Response>();
       public List<String> nice = new ArrayList<String>();
-
+      
       protected Character[] alphabetSections;
 
       public ArtistsAdapter(Context context) {
@@ -382,7 +349,8 @@ public class ArtistsActivity extends BaseBrowseActivity {
                      String mlit = resp.getString("mlit");
                      if (mlit.length() > 0 && !mlit.startsWith("mshc")) {
                         results.add(resp);
-                        nice.add(mlit.replaceAll("The ", "").toUpperCase());
+                        nice.add(Normalizer.normalize(mlit.replaceAll("The ", "").toUpperCase(), Normalizer.Form.NFKD)
+                        		.replaceAll("\\p{InCombiningDiacriticalMarks}+", ""));
                      }
                   }
                } catch (Exception e) {
