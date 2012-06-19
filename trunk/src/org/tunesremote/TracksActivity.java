@@ -157,6 +157,9 @@ public class TracksActivity extends BaseBrowseActivity {
       DisplayMetrics outMetrics = new DisplayMetrics();
       getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
       coverSize = outMetrics.densityDpi * 150;
+      if (coverSize > 320) {
+         coverSize = 320;
+      }
 
       if (playlistId != null || allAlbums)
          setContentView(R.layout.gen_list);
