@@ -82,7 +82,7 @@ public class Status {
    private Handler update = null;
    private final AtomicInteger failures = new AtomicInteger(0);
    private long revision = 1;
-   
+
    // This is used to fetch higher quality covers on high DPI devices
    // Has to be initialised in ControlActivity
    public static int screenHeight = 320;
@@ -324,9 +324,12 @@ public class Status {
          ThreadExecutor.runTask(new Runnable() {
             public void run() {
                try {
+                  if (screenHeight > 640) {
+                     screenHeight = 640;
+                  }
                   // http://192.168.254.128:3689/ctrl-int/1/nowplayingartwork?mw=320&mh=320&session-id=1940361390
-                  coverCache = RequestHelper.requestBitmap(String.format(
-                           "%s/ctrl-int/1/nowplayingartwork?mw=" + screenHeight + "&mh=" + screenHeight + "&session-id=%s", session.getRequestBase(),
+                  coverCache = RequestHelper.requestBitmap(String.format("%s/ctrl-int/1/nowplayingartwork?mw="
+                           + screenHeight + "&mh=" + screenHeight + "&session-id=%s", session.getRequestBase(),
                            session.sessionId));
                } catch (Exception e) {
                   Log.e(TAG, "Fetch Cover Exception:" + e.getMessage());

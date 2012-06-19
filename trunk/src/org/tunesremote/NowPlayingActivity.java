@@ -30,6 +30,7 @@ import java.util.List;
 import org.tunesremote.daap.Library;
 import org.tunesremote.daap.Response;
 import org.tunesremote.daap.Session;
+import org.tunesremote.util.ThreadExecutor;
 
 import android.app.ListActivity;
 import android.content.ComponentName;
@@ -70,28 +71,27 @@ public class NowPlayingActivity extends ListActivity {
 
    public ServiceConnection connection = new ServiceConnection() {
       public void onServiceConnected(ComponentName className, final IBinder service) {
-         new Thread(new Runnable() {
+         ThreadExecutor.runTask(new Runnable() {
 
-			public void run() {
-				try {
-					backend = ((BackendService.BackendBinder) service)
-							.getService();
-					session = backend.getSession();
+            public void run() {
+               try {
+                  backend = ((BackendService.BackendBinder) service).getService();
+                  session = backend.getSession();
 
-					if (session == null)
-						return;
+                  if (session == null)
+                     return;
 
-					// begin search now that we have a backend
-					library = new Library(session);
+                  // begin search now that we have a backend
+                  library = new Library(session);
 
-					// execute the Now Playing query for results
-					refreshNowPlaying();
-				} catch (Exception e) {
-					Log.e(TAG, "onServiceConnected:" + e.getMessage(), e);
-				}
-			}
+                  // execute the Now Playing query for results
+                  refreshNowPlaying();
+               } catch (Exception e) {
+                  Log.e(TAG, "onServiceConnected:" + e.getMessage(), e);
+               }
+            }
 
-		}).start();
+         });
       }
 
       public void onServiceDisconnected(ComponentName className) {
@@ -112,7 +112,7 @@ public class NowPlayingActivity extends ListActivity {
     * Execute the command to clear the server side cue.
     */
    public void clearCurrentCue() {
-		session.controlClearCue();
+      session.controlClearCue();
    }
 
    public Handler resultsUpdated = new Handler() {
@@ -151,19 +151,19 @@ public class NowPlayingActivity extends ListActivity {
 
       this.getListView().setOnItemClickListener(new OnItemClickListener() {
          public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-            new Thread(new Runnable() {
+            ThreadExecutor.runTask(new Runnable() {
 
-				public void run() {
-					if (iTunes) {
-						session.controlPlayAlbum(albumid, position);
-					} else {
-						session.controlPlayIndex(albumid, position);
-					}
-					setResult(RESULT_OK, new Intent());
-					finish();
-				}
+               public void run() {
+                  if (iTunes) {
+                     session.controlPlayAlbum(albumid, position);
+                  } else {
+                     session.controlPlayIndex(albumid, position);
+                  }
+                  setResult(RESULT_OK, new Intent());
+                  finish();
+               }
 
-			}).start();
+            });
          }
       });
 
@@ -179,42 +179,38 @@ public class NowPlayingActivity extends ListActivity {
       refresh.setIcon(android.R.drawable.ic_menu_rotate);
       refresh.setOnMenuItemClickListener(new OnMenuItemClickListener() {
          public boolean onMenuItemClick(MenuItem item) {
-            new Thread(new Runnable() {
+            ThreadExecutor.runTask(new Runnable() {
 
-				public void run() {
-					try {
-						refreshNowPlaying();
-					} catch (Exception e) {
-						Log.d(TAG,
-								String.format("Refresh Error: %s",
-										e.getMessage()));
-					}
-				}
+               public void run() {
+                  try {
+                     refreshNowPlaying();
+                  } catch (Exception e) {
+                     Log.d(TAG, String.format("Refresh Error: %s", e.getMessage()));
+                  }
+               }
 
-			}).start();
-			return true;
+            });
+            return true;
          }
       });
       MenuItem clearcue = menu.add(R.string.control_menu_clearcue);
       clearcue.setIcon(android.R.drawable.ic_menu_revert);
       clearcue.setOnMenuItemClickListener(new OnMenuItemClickListener() {
          public boolean onMenuItemClick(MenuItem item) {
-            new Thread(new Runnable() {
+            ThreadExecutor.runTask(new Runnable() {
 
-				public void run() {
-					try {
-						clearCurrentCue();
-						Thread.sleep(250);
-						refreshNowPlaying();
-					} catch (Exception e) {
-						Log.d(TAG,
-								String.format("Clear Cue Error: %s",
-										e.getMessage()));
-					}
-				}
+               public void run() {
+                  try {
+                     clearCurrentCue();
+                     Thread.sleep(250);
+                     refreshNowPlaying();
+                  } catch (Exception e) {
+                     Log.d(TAG, String.format("Clear Cue Error: %s", e.getMessage()));
+                  }
+               }
 
-			}).start();
-			return true;
+            });
+            return true;
          }
       });
       return true;
@@ -297,8 +293,9 @@ public class NowPlayingActivity extends ListActivity {
          }
 
          /*
-          * mlit --+ mikd 1 02 == 2 asal 12 Dance or Die asar 14 Family Force 5 astm 4 0003d5d6 == 251350 astn 2 0001
-          * miid 4 0000005b == 91 minm 12 dance or die
+          * mlit --+ mikd 1 02 == 2 asal 12 Dance or Die asar 14 Family Force 5
+          * astm 4 0003d5d6 == 251350 astn 2 0001 miid 4 0000005b == 91 minm 12
+          * dance or die
           */
 
          return convertView;

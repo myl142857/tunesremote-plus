@@ -79,7 +79,7 @@ public class SearchActivity extends Activity {
 
    public ServiceConnection connection = new ServiceConnection() {
       public void onServiceConnected(ComponentName className, final IBinder service) {
-         new Thread(new Runnable() {
+         ThreadExecutor.runTask(new Runnable() {
 
             public void run() {
                try {
@@ -103,7 +103,7 @@ public class SearchActivity extends Activity {
                }
             }
 
-         }).start();
+         });
 
       }
 

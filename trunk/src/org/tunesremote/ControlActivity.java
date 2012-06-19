@@ -31,6 +31,7 @@ import org.tunesremote.daap.Response;
 import org.tunesremote.daap.Session;
 import org.tunesremote.daap.Speaker;
 import org.tunesremote.daap.Status;
+import org.tunesremote.util.ThreadExecutor;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -131,7 +132,7 @@ public class ControlActivity extends Activity {
    public ServiceConnection connection = new ServiceConnection() {
       public void onServiceConnected(ComponentName className, final IBinder service) {
 
-         new Thread(new Runnable() {
+         ThreadExecutor.runTask(new Runnable() {
 
             public void run() {
                try {
@@ -166,7 +167,7 @@ public class ControlActivity extends Activity {
                   Log.e(TAG, "onServiceConnected:" + e.getMessage());
                }
             }
-         }).start();
+         });
 
       }
 
@@ -218,9 +219,8 @@ public class ControlActivity extends Activity {
                showingAlbumId = status.albumId;
             }
          case Status.UPDATE_STATE:
-            controlPause
-                     .setImageResource((status.getPlayStatus() == Status.STATE_PLAYING) ? R.drawable.btn_pause
-                              : R.drawable.btn_play);
+            controlPause.setImageResource((status.getPlayStatus() == Status.STATE_PLAYING) ? R.drawable.btn_pause
+                     : R.drawable.btn_play);
             seekBar.setMax(status.getProgressTotal());
 
          case Status.UPDATE_PROGRESS:
@@ -293,7 +293,7 @@ public class ControlActivity extends Activity {
       if (status == null)
          return;
 
-      new Thread(new Runnable() {
+      ThreadExecutor.runTask(new Runnable() {
 
          public void run() {
             try {
@@ -306,7 +306,7 @@ public class ControlActivity extends Activity {
             }
          }
 
-      }).start();
+      });
    }
 
    protected Handler doubleTapHandler = new Handler() {
@@ -738,8 +738,12 @@ public class ControlActivity extends Activity {
             }
          }
       });
-      
-      Status.screenHeight = getWindowManager().getDefaultDisplay().getHeight();
+
+      int height = getWindowManager().getDefaultDisplay().getHeight();
+      if (height > 640) {
+         height = 640;
+      }
+      Status.screenHeight = height;
 
       // Speakers adapter needed for the speakers dialog
       speakersAdapter = new SpeakersAdapter(this);
@@ -848,7 +852,7 @@ public class ControlActivity extends Activity {
    }
 
    protected void incrementVolume(final long increment) {
-      new Thread(new Runnable() {
+      ThreadExecutor.runTask(new Runnable() {
          public void run() {
             checkCachedVolume();
 
@@ -871,7 +875,7 @@ public class ControlActivity extends Activity {
 
             });
          }
-      }).start();
+      });
 
    }
 
@@ -1021,7 +1025,7 @@ public class ControlActivity extends Activity {
       MenuItem speakersMenuItem = menu.findItem(R.id.control_menu_speakers);
 
       // Determine whether the speakers menu item shall be visible
-      new Thread(new SpeakersRunnable(speakersMenuItem));
+      ThreadExecutor.runTask(new SpeakersRunnable(speakersMenuItem));
 
       return true;
    }
