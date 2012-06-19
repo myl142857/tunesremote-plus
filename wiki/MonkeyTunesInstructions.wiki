@@ -3,7 +3,7 @@
 
 == Introduction ==
 
-These instructions are for using [TunesRemote+] with [http://melloware.com/monkeytunes/ MonkeyTunes for MediaMonkey]
+These instructions are for using [http://code.google.com/p/tunesremote-plus TunesRemote+] with [http://melloware.com/monkeytunes/ MonkeyTunes for MediaMonkey]
 
 http://tunesremote-plus.googlecode.com/svn/wiki/monkeytunes-logo.png
 
