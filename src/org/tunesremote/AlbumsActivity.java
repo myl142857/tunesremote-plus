@@ -35,6 +35,7 @@ import org.tunesremote.daap.Library;
 import org.tunesremote.daap.RequestHelper;
 import org.tunesremote.daap.Response;
 import org.tunesremote.daap.Session;
+import org.tunesremote.util.ThreadExecutor;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -76,12 +77,12 @@ public class AlbumsActivity extends BaseBrowseActivity {
    protected String artist;
    protected Bitmap blank;
    protected Animation fadeUp;
-   
+
    protected int imageSize = 55;
 
    public ServiceConnection connection = new ServiceConnection() {
       public void onServiceConnected(ComponentName className, final IBinder service) {
-         new Thread(new Runnable() {
+         ThreadExecutor.runTask(new Runnable() {
 
             public void run() {
                try {
@@ -101,7 +102,7 @@ public class AlbumsActivity extends BaseBrowseActivity {
                }
             }
 
-         }).start();
+         });
 
       }
 
@@ -142,13 +143,16 @@ public class AlbumsActivity extends BaseBrowseActivity {
       this.list = this.getListView();
       this.adapter = new AlbumsAdapter(this);
       this.setListAdapter(adapter);
-      
+
       ((TextView) this.findViewById(android.R.id.empty)).setText(R.string.albums_empty);
-      
+
       DisplayMetrics outMetrics = new DisplayMetrics();
       getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
       imageSize = outMetrics.densityDpi * 55;
-      
+      if (imageSize > 110) {
+         imageSize = 110;
+      }
+
       fadeUp = AnimationUtils.loadAnimation(this, R.anim.fade_up);
 
       this.registerForContextMenu(this.getListView());
@@ -345,9 +349,9 @@ public class AlbumsActivity extends BaseBrowseActivity {
 
                // fetch the album cover from itunes
                byte[] raw = RequestHelper.request(String.format(
-                        "%s/databases/%d/groups/%d/extra_data/artwork?session-id=%s&mw=" + imageSize + 
-                        "&mh=" + imageSize + "&group-type=albums",
-                        session.getRequestBase(), session.databaseId, itemid, session.sessionId), false);
+                        "%s/databases/%d/groups/%d/extra_data/artwork?session-id=%s&mw=" + imageSize + "&mh="
+                                 + imageSize + "&group-type=albums", session.getRequestBase(), session.databaseId,
+                        itemid, session.sessionId), false);
                bitmap = BitmapFactory.decodeByteArray(raw, 0, raw.length);
 
                // if SOMEHOW (404, etc) this image was still null, then

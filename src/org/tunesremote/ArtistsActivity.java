@@ -33,6 +33,7 @@ import java.util.List;
 import org.tunesremote.daap.Library;
 import org.tunesremote.daap.Response;
 import org.tunesremote.daap.Session;
+import org.tunesremote.util.ThreadExecutor;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -62,7 +63,7 @@ import android.widget.TextView;
 public class ArtistsActivity extends BaseBrowseActivity {
 
    public final static String TAG = ArtistsActivity.class.toString();
-   public static final String sAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+   public static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
    protected BackendService backend;
    protected Session session;
@@ -72,7 +73,7 @@ public class ArtistsActivity extends BaseBrowseActivity {
 
    public ServiceConnection connection = new ServiceConnection() {
       public void onServiceConnected(ComponentName className, final IBinder service) {
-         new Thread(new Runnable() {
+         ThreadExecutor.runTask(new Runnable() {
 
             public void run() {
                try {
@@ -97,7 +98,7 @@ public class ArtistsActivity extends BaseBrowseActivity {
                }
             }
 
-         }).start();
+         });
       }
 
       public void onServiceDisconnected(ComponentName className) {
@@ -140,7 +141,7 @@ public class ArtistsActivity extends BaseBrowseActivity {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.gen_list);
       findViewById(R.id.loading_frame).setVisibility(View.VISIBLE);
-      
+
       ((TextView) this.findViewById(android.R.id.empty)).setText(R.string.artists_empty);
 
       this.adapter = new ArtistsAdapter(this);
@@ -269,7 +270,7 @@ public class ArtistsActivity extends BaseBrowseActivity {
       // Our first guess at where the section starts
       int index = (section * size) / 26;
       // Char taken from sAlphabet which corresponds to this section
-      char prefix = sAlphabet.charAt(section);
+      char prefix = ALPHABET.charAt(section);
 
       char current = startsWith(index);
 
@@ -320,7 +321,7 @@ public class ArtistsActivity extends BaseBrowseActivity {
 
       protected List<Response> results = new LinkedList<Response>();
       public List<String> nice = new ArrayList<String>();
-      
+
       protected Character[] alphabetSections;
 
       public ArtistsAdapter(Context context) {
@@ -330,7 +331,7 @@ public class ArtistsActivity extends BaseBrowseActivity {
          // hand
          alphabetSections = new Character[26];
          for (int i = 0; i < 26; i++) {
-            alphabetSections[i] = sAlphabet.charAt(i);
+            alphabetSections[i] = ALPHABET.charAt(i);
          }
 
       }
@@ -350,7 +351,7 @@ public class ArtistsActivity extends BaseBrowseActivity {
                      if (mlit.length() > 0 && !mlit.startsWith("mshc")) {
                         results.add(resp);
                         nice.add(Normalizer.normalize(mlit.replaceAll("The ", "").toUpperCase(), Normalizer.Form.NFKD)
-                        		.replaceAll("\\p{InCombiningDiacriticalMarks}+", ""));
+                                 .replaceAll("\\p{InCombiningDiacriticalMarks}+", ""));
                      }
                   }
                } catch (Exception e) {

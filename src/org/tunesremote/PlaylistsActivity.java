@@ -27,6 +27,7 @@ package org.tunesremote;
 import org.tunesremote.daap.Library;
 import org.tunesremote.daap.Playlist;
 import org.tunesremote.daap.Session;
+import org.tunesremote.util.ThreadExecutor;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -58,29 +59,26 @@ public class PlaylistsActivity extends BaseBrowseActivity {
 
    public ServiceConnection connection = new ServiceConnection() {
       public void onServiceConnected(ComponentName className, final IBinder service) {
-         new Thread(new Runnable() {
+         ThreadExecutor.runTask(new Runnable() {
 
-			public void run() {
-				try {
-					backend = ((BackendService.BackendBinder) service)
-							.getService();
-					session = backend.getSession();
+            public void run() {
+               try {
+                  backend = ((BackendService.BackendBinder) service).getService();
+                  session = backend.getSession();
 
-					if (session == null)
-						return;
+                  if (session == null)
+                     return;
 
-					adapter.results.clear();
+                  adapter.results.clear();
 
-					// begin search now that we have a backend
-					library = new Library(session);
-					library.readPlaylists(adapter);
-				} catch (Exception e) {
-					Log.e(TAG, "onServiceConnected:" + e.getMessage());
-				}
-			}
-
-		}).start();
-
+                  // begin search now that we have a backend
+                  library = new Library(session);
+                  library.readPlaylists(adapter);
+               } catch (Exception e) {
+                  Log.e(TAG, "onServiceConnected:" + e.getMessage());
+               }
+            }
+         });
       }
 
       public void onServiceDisconnected(ComponentName className) {
