@@ -213,14 +213,14 @@ public class ControlActivity extends Activity {
                   coverImage.setImageDrawable(new ColorDrawable(Color.BLACK));
                } else if (status.coverCache != null) {
                   // fade over to new coverart
-                  coverImage.setImageDrawable(new BitmapDrawable(status.coverCache));
+                  coverImage.setImageDrawable(new BitmapDrawable(getResources(), status.coverCache));
                }
                showingAlbumId = status.albumId;
             }
          case Status.UPDATE_STATE:
             controlPause
-                     .setImageResource((status.getPlayStatus() == Status.STATE_PLAYING) ? android.R.drawable.ic_media_pause
-                              : android.R.drawable.ic_media_play);
+                     .setImageResource((status.getPlayStatus() == Status.STATE_PLAYING) ? R.drawable.btn_pause
+                              : R.drawable.btn_play);
             seekBar.setMax(status.getProgressTotal());
 
          case Status.UPDATE_PROGRESS:
@@ -738,6 +738,8 @@ public class ControlActivity extends Activity {
             }
          }
       });
+      
+      Status.screenHeight = getWindowManager().getDefaultDisplay().getHeight();
 
       // Speakers adapter needed for the speakers dialog
       speakersAdapter = new SpeakersAdapter(this);

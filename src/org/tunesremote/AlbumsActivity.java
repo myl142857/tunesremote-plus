@@ -47,6 +47,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -54,6 +55,8 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -72,6 +75,9 @@ public class AlbumsActivity extends BaseBrowseActivity {
    protected AlbumsAdapter adapter;
    protected String artist;
    protected Bitmap blank;
+   protected Animation fadeUp;
+   
+   protected int imageSize = 55;
 
    public ServiceConnection connection = new ServiceConnection() {
       public void onServiceConnected(ComponentName className, final IBinder service) {
@@ -132,12 +138,18 @@ public class AlbumsActivity extends BaseBrowseActivity {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.gen_list);
 
-      ((TextView) this.findViewById(android.R.id.empty)).setText(R.string.albums_empty);
-
       this.artist = this.getIntent().getStringExtra(Intent.EXTRA_TITLE);
       this.list = this.getListView();
       this.adapter = new AlbumsAdapter(this);
       this.setListAdapter(adapter);
+      
+      ((TextView) this.findViewById(android.R.id.empty)).setText(R.string.albums_empty);
+      
+      DisplayMetrics outMetrics = new DisplayMetrics();
+      getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
+      imageSize = outMetrics.densityDpi * 55;
+      
+      fadeUp = AnimationUtils.loadAnimation(this, R.anim.fade_up);
 
       this.registerForContextMenu(this.getListView());
 
@@ -157,6 +169,8 @@ public class AlbumsActivity extends BaseBrowseActivity {
 
                   Intent intent = new Intent(AlbumsActivity.this, TracksActivity.class);
                   intent.putExtra(Intent.EXTRA_TITLE, albumid);
+                  intent.putExtra("minm", resp.getString("minm"));
+                  intent.putExtra("miid", Long.valueOf(resp.getNumberLong("miid")).intValue());
                   intent.putExtra("Artist", AlbumsActivity.this.artist);
                   intent.putExtra("AllAlbums", false);
                   AlbumsActivity.this.startActivityForResult(intent, 1);
@@ -331,7 +345,8 @@ public class AlbumsActivity extends BaseBrowseActivity {
 
                // fetch the album cover from itunes
                byte[] raw = RequestHelper.request(String.format(
-                        "%s/databases/%d/groups/%d/extra_data/artwork?session-id=%s&mw=55&mh=55&group-type=albums",
+                        "%s/databases/%d/groups/%d/extra_data/artwork?session-id=%s&mw=" + imageSize + 
+                        "&mh=" + imageSize + "&group-type=albums",
                         session.getRequestBase(), session.databaseId, itemid, session.sessionId), false);
                bitmap = BitmapFactory.decodeByteArray(raw, 0, raw.length);
 
@@ -373,7 +388,10 @@ public class AlbumsActivity extends BaseBrowseActivity {
             // find actual position and update view
             int visible = position - list.getFirstVisiblePosition();
             View view = list.getChildAt(visible);
-            ((ImageView) view.findViewById(android.R.id.icon)).setImageBitmap(bitmap);
+            ImageView v = (ImageView) view.findViewById(android.R.id.icon);
+            v.setVisibility(View.INVISIBLE);
+            v.setImageBitmap(bitmap);
+            v.startAnimation(AnimationUtils.loadAnimation(AlbumsActivity.this, R.anim.fade_up));
 
          } catch (Exception e) {
             // we probably ran into an item thats now collapsed, just ignore
