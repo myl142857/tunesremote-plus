@@ -740,10 +740,12 @@ public class ControlActivity extends Activity {
       });
 
       int height = getWindowManager().getDefaultDisplay().getHeight();
-      if (height > 640) {
-         height = 640;
+      int width = getWindowManager().getDefaultDisplay().getWidth();
+      int largestDimen = height >= width ? height : width;
+      if (largestDimen > 1280) {
+    	  largestDimen = 1280;
       }
-      Status.screenHeight = height;
+      Status.screenHeight = largestDimen;
 
       // Speakers adapter needed for the speakers dialog
       speakersAdapter = new SpeakersAdapter(this);
