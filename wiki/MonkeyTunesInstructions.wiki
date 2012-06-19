@@ -9,19 +9,19 @@ http://tunesremote-plus.googlecode.com/svn/wiki/monkeytunes-logo.png
 
 == Server Installation ==
 
-   # Install the latest [http://www.mediamonkey.com/ MediaMonkey from Ventis Media].  Make sure at the end of the install to say *YES* when asked to run !MediaMonkey.  This is important because the Installer runs as !Administrator and installs the COM SDK that MonkeyTunes uses.  If you don't say yes you will get COM errors in the MonkeyTunes log.
+   # Install the latest [http://www.mediamonkey.com/ MediaMonkey from Ventis Media].  Make sure at the end of the install to say *YES* when asked to run !MediaMonkey.  This is important because the Installer runs as !Administrator and installs the COM SDK that !MonkeyTunes uses.  If you don't say yes you will get COM errors in the !MonkeyTunes log.
    # Install the latest [http://melloware.com/monkeytunes/ MonkeyTunes] plugin for MediaMonkey from [http://melloware.com/ Melloware].
-   # Run !MediaMonkey normally.  You will see a new MonkeyTunes treenode in your !MediaMonkey like the following screenshot:
+   # Run !MediaMonkey normally.  You will see a new !MonkeyTunes treenode in your !MediaMonkey like the following screenshot:
 
 http://tunesremote-plus.googlecode.com/svn/wiki/mt-connect.jpg
 
 == Client Installation ==
 
-   # Look for TunesRemote+ in the Android Market and install it.
-   # Run the TunesRemote+ application on your Android device.
-   # Using Bonjour it will try and discover your running MonkeyTunes.  Give it a few seconds...
-   # If it finds your MonkeyTunes click it then wait and in !MediaMonkey you will see your device appear in the MonkeyTunes Treeview, simply click it and enter the 4 digit code!
-   # If MonkeyTunes does *NOT* automatically find your library click the Menu button on your Android device and then choose "Manual"
+   # Look for !TunesRemote+ in the !Android !Market and install it.
+   # Run the !TunesRemote+ application on your Android device.
+   # Using Bonjour it will try and discover your running !MonkeyTunes.  Give it a few seconds...
+   # If it finds your MonkeyTunes click it then wait and in !MediaMonkey you will see your device appear in the !MonkeyTunes Treeview, simply click it and enter the 4 digit code!
+   # If !MonkeyTunes does *NOT* automatically find your library click the Menu button on your !Android device and then choose "Manual"
    # Enter the IP Address of your PC running MonkeyTunes (e.g. 192.168.1.100) and for Pairing Code enter "1" and it should connect immediately!  <font color="red">*IMPORTANT: Do NOT enter Pairing Code "0000" or "5309" only enter "1" or "0000000000000001".*</font>
 
 If you have trouble see our [http://forum.melloware.com/viewtopic.php?f=16&t=7703 MonkeyTunes Troubleshooting FAQ]
