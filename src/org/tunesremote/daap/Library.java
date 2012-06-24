@@ -142,7 +142,7 @@ public class Library {
             // http://192.168.254.128:3689/databases/36/groups?session-id=1034286700&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist&type=music&group-type=albums&sort=artist&include-sort-headers=1&index=0-50
             raw = RequestHelper
                      .request(String
-                              .format("%s/databases/%d/groups?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist&type=music&group-type=albums&sort=artist&include-sort-headers=1&index=%d-%d",
+                              .format("%s/databases/%d/groups?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist&type=music&group-type=albums&sort=album&include-sort-headers=1&index=%d-%d",
                                        session.getRequestBase(), session.databaseId, session.sessionId, start, start + RESULT_INCREMENT), false);
 
             // parse list, passing off events in the process

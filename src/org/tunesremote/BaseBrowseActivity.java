@@ -39,6 +39,7 @@ public class BaseBrowseActivity extends ListActivity {
 
    public static final int RESULT_SWITCH_TO_ARTISTS = RESULT_FIRST_USER + 1;
    public static final int RESULT_SWITCH_TO_PLAYLISTS = RESULT_FIRST_USER + 2;
+   public static final int RESULT_SWITCH_TO_ALBUMS = RESULT_FIRST_USER + 3;
    protected SharedPreferences prefs;
 
    @Override
@@ -85,6 +86,19 @@ public class BaseBrowseActivity extends ListActivity {
             BaseBrowseActivity.this.finish();
             return true;
          }
+      });
+      
+      MenuItem album = menu.add(R.string.control_menu_albums);
+      album.setIcon(R.drawable.ic_search_category_music_album);
+      album.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+		@Override
+		public boolean onMenuItemClick(MenuItem item) {
+			BaseBrowseActivity.this.setResult(RESULT_SWITCH_TO_ALBUMS);
+			BaseBrowseActivity.this.finish();
+			return true;
+		}
+    	  
       });
 
       return true;

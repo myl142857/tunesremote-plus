@@ -10,7 +10,7 @@
         android:id="@+id/control_menu_artists"
         android:icon="@drawable/ic_search_category_music_artist"
         android:title="@string/control_menu_artists">
-    </item>
+    </item><item android:id="@+id/control_menu_album" android:icon="@drawable/ic_search_category_music_album" android:title="@string/control_menu_albums"></item>
     <item
         android:id="@+id/control_menu_playlists"
         android:icon="@drawable/ic_search_category_music_song"
@@ -46,5 +46,6 @@
         android:icon="@android:drawable/ic_menu_info_details"
         android:title="@string/control_menu_about">
     </item>
+    
 
 </menu>
