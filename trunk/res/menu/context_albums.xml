@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:id="@+id/context_album_play" android:title="@string/albums_menu_play"></item>
+    <item android:id="@+id/context_album_queue" android:title="@string/albums_menu_queue"></item>
+    <item android:id="@+id/context_album_browse" android:title="@string/albums_menu_browse"></item>
+    
+
+</menu>

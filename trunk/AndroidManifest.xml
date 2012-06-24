@@ -37,6 +37,7 @@
     <activity android:name=".PairingActivity" android:theme="@android:style/Theme.Dialog" />
     <activity android:name=".ArtistsActivity" android:configChanges="keyboardHidden|orientation" />
     <activity android:name=".AlbumsActivity" android:configChanges="keyboardHidden|orientation" />
+    <activity android:name=".AllAlbumsActivity" android:configChanges="keyboardHidden|orientation" />
     <activity android:name=".TracksActivity" android:configChanges="keyboardHidden|orientation" />
     <activity android:name=".PlaylistsActivity" android:configChanges="keyboardHidden|orientation" />
     <activity android:name=".BrowseActivity" android:configChanges="keyboardHidden|orientation" />
