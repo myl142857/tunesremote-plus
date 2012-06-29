@@ -28,8 +28,7 @@
 			android:id="@+id/controlsview"
 		android:orientation="vertical"
 		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		>
+		android:layout_height="fill_parent">
 	    
 		<ImageView
 			android:id="@+id/cover"
@@ -37,13 +36,11 @@
 			android:layout_height="fill_parent"
 			/>
 		
-	
 		<org.tunesremote.FadeView
-			android:id="@+id/fadeview"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
-			>
-			
+		    android:id="@+id/fadeview"
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+            android:layout_marginTop="@dimen/action_bar_offset" >
 	
 		<LinearLayout
 			android:id="@+id/info_box"
@@ -141,7 +138,7 @@
 			        android:layout_height="match_parent"
 			        android:layout_weight="1"
 			        android:background="#00000000"
-			        android:src="@drawable/btn_shuffle_off" />
+			        android:src="@drawable/btn_shuffle" />
 
 			    <ImageButton
 			        android:id="@+id/control_prev"
@@ -173,7 +170,7 @@
 			        android:layout_height="match_parent"
 			        android:layout_weight="1"
 			        android:background="#00000000"
-			        android:src="@drawable/btn_repeat_off" />
+			        android:src="@drawable/btn_repeat" />
 			</LinearLayout>
 		
 		</RelativeLayout>

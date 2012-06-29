@@ -33,6 +33,7 @@ import android.util.Log;
  * This is a meta-activity that handles the "Browse of song" activity and it's
  * subactivities Doesn't show any UI itself
  */
+@Deprecated
 public class BrowseActivity extends Activity {
 
    public final static String TAG = AlbumsActivity.class.toString();

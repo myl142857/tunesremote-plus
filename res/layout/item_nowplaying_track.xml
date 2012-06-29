@@ -23,43 +23,38 @@
     Copyright (C) 2008. Jeffrey Sharkey, http://jsharkey.org/
     All Rights Reserved.
 -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:paddingTop="10dip"
+                android:paddingLeft="10dip"
+                android:paddingRight="10dip"
+                android:paddingBottom="10dip" >
+    <TextView
+            android:id="@android:id/text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textStyle="bold"
+            />
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:orientation="vertical"
-android:layout_width="fill_parent"
-android:layout_height="fill_parent"
->
-	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:paddingTop="10dip"
-		android:paddingLeft="10dip"
-		android:paddingRight="10dip"
-		android:paddingBottom="0dip"
-		>
-			<TextView
-				android:id="@android:id/text1"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:paddingRight="60dip"
-				android:textAppearance="?android:attr/textAppearanceMedium"
-				android:textStyle="bold"
-				/>
-		
-			<TextView
-				android:id="@android:id/text2"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_alignParentRight="true"
-				android:textAppearance="?android:attr/textAppearanceMedium"
-				/>
-				
-	</RelativeLayout>
-	<TextView
-		android:id="@+id/artist"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:textAppearance="?android:attr/textAppearanceSmall"
-		android:paddingBottom="10dip"
-		/>
-</LinearLayout>
+    <TextView
+            android:id="@android:id/text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            />
+
+
+    <TextView
+            android:id="@+id/artist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_alignLeft="@android:id/text1"
+            android:layout_below="@android:id/text1"
+            />
+
+</RelativeLayout>

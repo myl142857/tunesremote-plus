@@ -29,14 +29,14 @@
 	android:layout_width="fill_parent" 
 	android:layout_height="fill_parent"
 	android:orientation="vertical"
-	android:padding="10dip"
 	android:background="#a000">
 	
 	<TextView  
 		android:id="@+id/np_title"
 		android:layout_width="fill_parent" 
 		android:layout_height="wrap_content" 
-		android:textStyle="bold" 
+		android:textStyle="bold"
+        android:paddingTop="10dip"
 	   	android:gravity="center_vertical|center_horizontal"
 		android:textAppearance="?android:attr/textAppearanceLarge"
 		android:text="@string/nowplaying_title"
