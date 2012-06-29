@@ -25,59 +25,28 @@
 
 package org.tunesremote;
 
-import java.util.List;
-
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.*;
+import android.content.SharedPreferences.Editor;
+import android.graphics.Color;
+import android.graphics.drawable.*;
+import android.os.*;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.*;
+import android.view.View.OnClickListener;
+import android.widget.*;
+import android.widget.RatingBar.OnRatingBarChangeListener;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import org.tunesremote.daap.Response;
 import org.tunesremote.daap.Session;
 import org.tunesremote.daap.Speaker;
 import org.tunesremote.daap.Status;
 import org.tunesremote.util.ThreadExecutor;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Vibrator;
-import android.preference.PreferenceManager;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RatingBar;
-import android.widget.RatingBar.OnRatingBarChangeListener;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.TextView;
-import android.widget.Toast;
+import java.util.List;
 
 /**
  * Main activity of TunesRemote. This controls the player and drives all the
@@ -120,6 +89,7 @@ public class ControlActivity extends Activity {
 	protected SharedPreferences prefs;
 	protected long cachedTime = -1;
 	protected long cachedVolume = -1;
+	protected LevelListDrawable shuffle, repeat, play;
 
 	/**
 	 * List of available speakers
@@ -202,7 +172,7 @@ public class ControlActivity extends Activity {
 
 			case Status.UPDATE_COVER:
 				boolean forced = (msg.what == Status.UPDATE_COVER);
-				boolean shouldUpdate = (status.albumId != showingAlbumId) && !status.coverEmpty;
+				boolean shouldUpdate = (!status.albumId.equals(showingAlbumId)) && !status.coverEmpty;
 				if (forced)
 					shouldUpdate = true;
 
@@ -215,8 +185,8 @@ public class ControlActivity extends Activity {
 						coverImage.setImageDrawable(new ColorDrawable(Color.BLACK));
 					} else if (status.coverCache != null) {
 						// fade over to new coverart
-						Drawable one = null;
-						if ((one = coverImage.getDrawable()) != null) {
+						Drawable one = coverImage.getDrawable();
+						if (one != null) {
 							TransitionDrawable trans = new TransitionDrawable(new Drawable[] { one, 
 									new BitmapDrawable(getResources(), status.coverCache) });
 							coverImage.setImageDrawable(trans);
@@ -360,6 +330,7 @@ public class ControlActivity extends Activity {
 		android.telephony.TelephonyManager tm = (android.telephony.TelephonyManager) ControlActivity.this
 				.getSystemService(android.content.Context.TELEPHONY_SERVICE);
 		tm.listen(psListener, android.telephony.PhoneStateListener.LISTEN_CALL_STATE);
+
 	}
 
 	@Override
@@ -595,24 +566,24 @@ public class ControlActivity extends Activity {
 		// before we go any further, make sure theyve agreed to EULA
 		this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		this.agreed = prefs.getBoolean(EULA, false);
-		if (this.prefs.getBoolean(this.getString(R.string.pref_fullscreen), true)) {
+		if (this.prefs.getBoolean(this.getString(R.string.pref_fullscreen), true) &&
+				Build.VERSION.SDK_INT <= Build.VERSION_CODES.HONEYCOMB) {
+			// Can't use this above Honeycomb, hides the ActionBar making
+			// control impossible
 			this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		}
-
-		// This is used to throw a dialog whenever a network call
-		// is made on the UI thread. This is diagnostic for API 11+
-		// compatibility, but *doesn't* run when compiled for release.
-		// If the dialogs annoy you, just remove .penaltyDialog()
-		// if (BuildConfig.DEBUG) StrictMode.setThreadPolicy(new
-		// StrictMode.ThreadPolicy.Builder().detectNetwork().penaltyDialog().penaltyLog().build());
-
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			//Instead, make the ActionBar translucent
+			this.requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+			getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#AA000000")));
+		}
 		if (!this.agreed) {
 			// show eula wizard
 			this.startActivityForResult(new Intent(this, WizardActivity.class), 1);
 		}
 
 		setContentView(R.layout.act_control);
-
+		
 		this.vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
 
 		// prepare volume toast view
@@ -657,6 +628,9 @@ public class ControlActivity extends Activity {
 
 		this.controlShuffle = (ImageButton) findViewById(R.id.control_shuffle);
 		this.controlRepeat = (ImageButton) findViewById(R.id.control_repeat);
+
+		shuffle = (LevelListDrawable) controlShuffle.getDrawable();
+		repeat = (LevelListDrawable) controlRepeat.getDrawable();
 
 		this.seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromTouch) {
@@ -707,7 +681,7 @@ public class ControlActivity extends Activity {
 				if (session == null) {
 					return;
 				}
-				if (session != null && ControlActivity.status.getPlayStatus() == Status.STATE_PLAYING) {
+				if (ControlActivity.status.getPlayStatus() == Status.STATE_PLAYING) {
 					session.controlPause();
 				} else {
 					session.controlPlay();
@@ -753,8 +727,8 @@ public class ControlActivity extends Activity {
 		int height = getWindowManager().getDefaultDisplay().getHeight();
 		int width = getWindowManager().getDefaultDisplay().getWidth();
 		int largestDimen = height >= width ? height : width;
-		if (largestDimen > 1280) {
-			largestDimen = 1280;
+		if (largestDimen > 640) {
+			largestDimen = 640;
 		}
 		Status.screenHeight = largestDimen;
 
@@ -774,15 +748,15 @@ public class ControlActivity extends Activity {
 		switch (status.getRepeat()) {
 
 		case Status.REPEAT_OFF: // go to single
-			controlRepeat.setImageResource(R.drawable.btn_repeat_off);
+			repeat.setLevel(0);
 			break;
 
 		case Status.REPEAT_SINGLE: // go to all
-			controlRepeat.setImageResource(R.drawable.btn_repeat_once);
+			repeat.setLevel(2);
 			break;
 
 		case Status.REPEAT_ALL: // go to off
-			controlRepeat.setImageResource(R.drawable.btn_repeat_on_all);
+			repeat.setLevel(1);
 			break;
 
 		}
@@ -799,19 +773,19 @@ public class ControlActivity extends Activity {
 		case Status.REPEAT_OFF: // go to single
 			session.controlRepeat(Status.REPEAT_SINGLE);
 			repeatToast.setText(R.string.control_menu_repeat_one);
-			controlRepeat.setImageResource(R.drawable.btn_repeat_once);
+			repeat.setLevel(2);
 			break;
 
 		case Status.REPEAT_SINGLE: // go to all
 			session.controlRepeat(Status.REPEAT_ALL);
 			repeatToast.setText(R.string.control_menu_repeat_all);
-			controlRepeat.setImageResource(R.drawable.btn_repeat_on_all);
+			repeat.setLevel(1);
 			break;
 
 		case Status.REPEAT_ALL: // go to off
 			session.controlRepeat(Status.REPEAT_OFF);
 			repeatToast.setText(R.string.control_menu_repeat_none);
-			controlRepeat.setImageResource(R.drawable.btn_repeat_off);
+			repeat.setLevel(0);
 			break;
 
 		}
@@ -827,12 +801,12 @@ public class ControlActivity extends Activity {
 
 		switch (status.getShuffle()) {
 
-		case Status.SHUFFLE_OFF: // Turn shuffle on
-			controlShuffle.setImageResource(R.drawable.btn_shuffle_off);
+		case Status.SHUFFLE_OFF: // Shuffle off
+			shuffle.setLevel(0);
 			break;
 
-		case Status.SHUFFLE_ON: // Turn shuffle off
-			controlShuffle.setImageResource(R.drawable.btn_shuffle_on);
+		case Status.SHUFFLE_ON: // Shuffle on
+			shuffle.setLevel(1);
 			break;
 
 		}
@@ -849,13 +823,13 @@ public class ControlActivity extends Activity {
 		case Status.SHUFFLE_OFF: // Turn shuffle on
 			session.controlShuffle(Status.SHUFFLE_ON);
 			shuffleToast.setText(R.string.control_menu_shuffle_on);
-			controlShuffle.setImageResource(R.drawable.btn_shuffle_on);
+			shuffle.setLevel(1);
 			break;
 
 		case Status.SHUFFLE_ON: // Turn shuffle off
 			session.controlShuffle(Status.SHUFFLE_OFF);
 			shuffleToast.setText(R.string.control_menu_shuffle_off);
-			controlShuffle.setImageResource(R.drawable.btn_shuffle_off);
+			shuffle.setLevel(0);
 			break;
 
 		}
@@ -940,37 +914,6 @@ public class ControlActivity extends Activity {
 		return true;
 	}
 
-	/**
-	 * Used to start a notification with the currently playing item. Not
-	 * currently used.
-	 * @return A notification which shows the current song
-	 */
-	public Notification initNotification() {
-
-		// Check session isn't null
-		if (session == null || status == null)
-			return null;
-
-		String song = status.getTrackName();
-		Notification note = new Notification(R.drawable.ic_notify, song, System.currentTimeMillis());
-
-		PendingIntent clicker = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(this,
-				ControlActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP), 0);
-		note.setLatestEventInfo(getApplicationContext(), song, status.getTrackArtist(), clicker);
-		note.flags = Notification.FLAG_ONGOING_EVENT;
-
-		return note;
-
-	}
-
-	/**
-	 * Used to recind the notification created in {@link initNotification()}. Not
-	 * currently used.
-	 */
-	public void killNotification() {
-		((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(NOTIFICATION_CONTROL);
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.act_control, menu);
@@ -988,21 +931,7 @@ public class ControlActivity extends Activity {
 			return true;
 
 		case R.id.control_menu_artists:
-			Intent artistIntent = new Intent(ControlActivity.this, BrowseActivity.class);
-			artistIntent.putExtra("windowType", BaseBrowseActivity.RESULT_SWITCH_TO_ARTISTS);
-			startActivity(artistIntent);
-			return true;
-
-		case R.id.control_menu_playlists:
-			Intent playlistIntent = new Intent(ControlActivity.this, BrowseActivity.class);
-			playlistIntent.putExtra("windowType", BaseBrowseActivity.RESULT_SWITCH_TO_PLAYLISTS);
-			startActivity(playlistIntent);
-			return true;
-			
-		case R.id.control_menu_album:
-			Intent albumIntent = new Intent(ControlActivity.this, BrowseActivity.class);
-			albumIntent.putExtra("windowType", BaseBrowseActivity.RESULT_SWITCH_TO_ALBUMS);
-			startActivity(albumIntent);
+			startActivity(new Intent(this, LibraryBrowseActivity.class));
 			return true;
 
 		case R.id.control_menu_speakers:
@@ -1045,10 +974,6 @@ public class ControlActivity extends Activity {
 
 		// Determine whether the speakers menu item shall be visible
 		ThreadExecutor.runTask(new SpeakersRunnable(speakersMenuItem));
-		
-		if (!BuildConfig.DEBUG) {
-			menu.findItem(R.id.control_menu_album).setVisible(false);
-		}
 
 		return true;
 	}

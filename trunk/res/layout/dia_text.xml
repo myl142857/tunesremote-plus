@@ -32,12 +32,12 @@
 	>
 
 	<EditText
-		android:id="@android:id/text1"
-		android:layout_width="250dip"
-		android:singleLine="true"
-		android:layout_height="wrap_content"
-		android:hint="@string/dia_ipaddress"
-		/>
+	    android:id="@android:id/text1"
+	    android:layout_width="250dip"
+	    android:layout_height="wrap_content"
+	    android:hint="@string/dia_ipaddress"
+	    android:inputType="phone"
+	    android:singleLine="true" />
 			
 	<EditText
 		android:id="@android:id/text2"

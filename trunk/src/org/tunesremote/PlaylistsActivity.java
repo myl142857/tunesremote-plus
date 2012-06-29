@@ -47,6 +47,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
+@Deprecated
 public class PlaylistsActivity extends BaseBrowseActivity {
 
    public final static String TAG = PlaylistsActivity.class.toString();
@@ -106,7 +107,6 @@ public class PlaylistsActivity extends BaseBrowseActivity {
    public void onStop() {
       super.onStop();
       this.unbindService(connection);
-
    }
 
    @Override

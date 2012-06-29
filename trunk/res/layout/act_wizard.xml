@@ -40,30 +40,30 @@
 		/>
 		
 	<LinearLayout
-		android:orientation="horizontal"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:padding="5dip"
-		>
-		
-		<Button
-			android:id="@+id/action_prev"
-			android:layout_width="120dip"
-			android:layout_height="wrap_content"
-			android:drawableLeft="@drawable/ic_btn_back"
-			android:text="Cancel"
-			android:gravity="center"
-			/>
-	
-		<Button
-			android:id="@+id/action_next"
-			android:layout_width="120dip"
-			android:layout_height="wrap_content"
-			android:drawableRight="@drawable/ic_btn_next"
-			android:text="Agree"
-			android:gravity="center"
-			/>
-	
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+
+	    <Button
+	        android:id="@+id/action_prev"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:drawableLeft="@drawable/ic_btn_back"
+	        android:gravity="center"
+	        android:padding="8dp"
+	        android:text="@string/cancel" />
+
+	    <Button
+	        android:id="@+id/action_next"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:drawableRight="@drawable/ic_btn_next"
+	        android:gravity="center"
+	        android:padding="8dp"
+	        android:text="Agree" />
+
 	</LinearLayout>
 
 </LinearLayout>

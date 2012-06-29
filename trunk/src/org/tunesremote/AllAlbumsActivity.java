@@ -25,50 +25,32 @@
 
 package org.tunesremote;
 
-import java.lang.ref.SoftReference;
-import java.text.Normalizer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import org.tunesremote.daap.Library;
-import org.tunesremote.daap.RequestHelper;
-import org.tunesremote.daap.Response;
-import org.tunesremote.daap.Session;
-import org.tunesremote.util.ThreadExecutor;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Message;
+import android.os.*;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.SparseArray;
-import android.view.ContextMenu;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
+import android.widget.*;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.SectionIndexer;
-import android.widget.TextView;
+import org.tunesremote.daap.Library;
+import org.tunesremote.daap.RequestHelper;
+import org.tunesremote.daap.Response;
+import org.tunesremote.daap.Session;
+import org.tunesremote.util.ThreadExecutor;
 
+import java.lang.ref.SoftReference;
+import java.text.Normalizer;
+import java.util.*;
+
+@Deprecated
 public class AllAlbumsActivity extends BaseBrowseActivity {
 
 	public final static String TAG = AllAlbumsActivity.class.toString();
@@ -94,8 +76,8 @@ public class AllAlbumsActivity extends BaseBrowseActivity {
 
 						if (session == null)
 							return;
-
-						adapter.results.clear();
+						
+						if (adapter.results.size() > 0) return;
 
 						// begin search now that we have a backend
 						library = new Library(session);

@@ -25,10 +25,9 @@
 
 package org.tunesremote;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
+import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
@@ -38,6 +37,9 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class FadeView extends RelativeLayout {
 
@@ -62,6 +64,10 @@ public class FadeView extends RelativeLayout {
          shuffle.startAnimation(fadeDown);
          repeat.clearAnimation();
          repeat.startAnimation(fadeDown);
+	      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+		      ((Activity) getContext()).getActionBar().hide();
+		      setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+	      }
       }
    };
 
@@ -185,6 +191,10 @@ public class FadeView extends RelativeLayout {
          shuffle.startAnimation(fadeUp);
          repeat.clearAnimation();
          repeat.startAnimation(fadeUp);
+	      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+		      ((Activity) getContext()).getActionBar().show();
+		      setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+	      }
 
       }
    }

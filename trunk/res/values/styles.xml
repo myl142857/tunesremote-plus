@@ -23,7 +23,7 @@
     Copyright (C) 2008. Jeffrey Sharkey, http://jsharkey.org/
     All Rights Reserved.
 -->
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
     <style name="ListText" parent="@android:style/TextAppearance.Medium">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">55dip</item>
@@ -31,4 +31,11 @@
         <item name="android:gravity">center</item>
         <item name="android:ellipsize">end</item>
     </style>
+    <style name="PagerStrip">
+        <item name="android:textColor">#33b5e5</item>
+    </style>
+    
+    <color name="highlight">#FF33B5E5</color>
+    <color name="highlight_60">#9933B5E5</color>
+    <color name="highlight_40">#6633B5E5</color>
 </resources>
