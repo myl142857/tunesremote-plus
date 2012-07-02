@@ -66,7 +66,7 @@ public class BrowseActivity extends Activity {
       else if (windowType == BaseBrowseActivity.RESULT_SWITCH_TO_PLAYLISTS)
          this.startActivityForResult(new Intent(BrowseActivity.this, PlaylistsActivity.class), 1);
       else if (windowType == BaseBrowseActivity.RESULT_SWITCH_TO_ALBUMS)
-          this.startActivityForResult(new Intent(BrowseActivity.this, AllAlbumsActivity.class), 1);
+         this.startActivityForResult(new Intent(BrowseActivity.this, AllAlbumsActivity.class), 1);
       else
          Log.e(TAG, String.format("Unknown window type: %d", windowType));
    }

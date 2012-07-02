@@ -25,6 +25,17 @@
 
 package org.tunesremote;
 
+import java.text.Normalizer;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.tunesremote.daap.Library;
+import org.tunesremote.daap.Response;
+import org.tunesremote.daap.Session;
+import org.tunesremote.util.ThreadExecutor;
+
+import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -36,8 +47,12 @@ import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.*;
+import android.view.ContextMenu;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -45,15 +60,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
-import org.tunesremote.daap.Library;
-import org.tunesremote.daap.Response;
-import org.tunesremote.daap.Session;
-import org.tunesremote.util.ThreadExecutor;
-
-import java.text.Normalizer;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 @Deprecated
 public class ArtistsActivity extends BaseBrowseActivity {
@@ -339,6 +345,7 @@ public class ArtistsActivity extends BaseBrowseActivity {
 
          runOnUiThread(new Runnable() {
 
+            @TargetApi(9)
             public void run() {
                try {
                   // add a found search result to our list

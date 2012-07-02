@@ -45,7 +45,7 @@ public class BaseBrowseActivity extends ListActivity {
       super.onCreate(savedInstanceState);
       this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
       if (this.prefs.getBoolean(this.getString(R.string.pref_fullscreen), true)
-		      && Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+               && Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
          this.requestWindowFeature(Window.FEATURE_NO_TITLE);
       }
    }
@@ -62,46 +62,6 @@ public class BaseBrowseActivity extends ListActivity {
       this.setResult(resultCode, intent);
       this.finish();
    }
-
-//   @Override
-//   public boolean onCreateOptionsMenu(Menu menu) {
-//      super.onCreateOptionsMenu(menu);
-//
-//      MenuItem artists = menu.add(R.string.control_menu_artists);
-//      artists.setIcon(R.drawable.ic_search_category_music_artist);
-//      artists.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-//         public boolean onMenuItemClick(MenuItem item) {
-//            BaseBrowseActivity.this.setResult(RESULT_SWITCH_TO_ARTISTS);
-//            BaseBrowseActivity.this.finish();
-//            return true;
-//         }
-//      });
-//
-//      MenuItem playlists = menu.add(R.string.control_menu_playlists);
-//      playlists.setIcon(R.drawable.ic_search_category_music_song);
-//      playlists.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-//         public boolean onMenuItemClick(MenuItem item) {
-//            BaseBrowseActivity.this.setResult(RESULT_SWITCH_TO_PLAYLISTS);
-//            BaseBrowseActivity.this.finish();
-//            return true;
-//         }
-//      });
-//
-//      MenuItem album = menu.add(R.string.control_menu_albums);
-//      album.setIcon(R.drawable.ic_search_category_music_album);
-//      album.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-//
-//		@Override
-//		public boolean onMenuItemClick(MenuItem item) {
-//			BaseBrowseActivity.this.setResult(RESULT_SWITCH_TO_ALBUMS);
-//			BaseBrowseActivity.this.finish();
-//			return true;
-//		}
-//
-//      });
-//
-//      return true;
-//   }
 
    @Override
    protected void onResume() {
