@@ -25,6 +25,11 @@
 
 package org.tunesremote;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
@@ -38,9 +43,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 public class FadeView extends RelativeLayout {
 
    public final static String TAG = FadeView.class.toString();
@@ -51,6 +53,8 @@ public class FadeView extends RelativeLayout {
    public boolean allowFade = true;
 
    public Handler fadeDownHandler = new Handler() {
+      @SuppressLint("NewApi")
+      @TargetApi(11)
       @Override
       public void handleMessage(Message msg) {
          assertViews();
@@ -64,10 +68,10 @@ public class FadeView extends RelativeLayout {
          shuffle.startAnimation(fadeDown);
          repeat.clearAnimation();
          repeat.startAnimation(fadeDown);
-	      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-		      ((Activity) getContext()).getActionBar().hide();
-		      setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
-	      }
+         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            ((Activity) getContext()).getActionBar().hide();
+            setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+         }
       }
    };
 
@@ -173,6 +177,8 @@ public class FadeView extends RelativeLayout {
       this.startFade();
    }
 
+   @TargetApi(11)
+   @SuppressLint("NewApi")
    public void bringIn() {
       // fade in controls if not already visible
       if (this.fadeTimer != null)
@@ -191,10 +197,10 @@ public class FadeView extends RelativeLayout {
          shuffle.startAnimation(fadeUp);
          repeat.clearAnimation();
          repeat.startAnimation(fadeUp);
-	      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-		      ((Activity) getContext()).getActionBar().show();
-		      setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
-	      }
+         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            ((Activity) getContext()).getActionBar().show();
+            setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+         }
 
       }
    }
