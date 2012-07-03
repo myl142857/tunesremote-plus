@@ -25,8 +25,8 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.tunesremote"
-    android:versionCode="243"
-    android:versionName="2.4.3" >
+    android:versionCode="244"
+    android:versionName="2.4.4" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -63,13 +63,7 @@
             android:name=".PairingActivity"
             android:theme="@android:style/Theme.Dialog" />
         <activity
-            android:name=".ArtistsActivity"
-            android:configChanges="keyboardHidden|orientation" />
-        <activity
             android:name=".AlbumsActivity"
-            android:configChanges="keyboardHidden|orientation" />
-        <activity
-            android:name=".AllAlbumsActivity"
             android:configChanges="keyboardHidden|orientation" />
         <activity
             android:name=".TracksActivity"
