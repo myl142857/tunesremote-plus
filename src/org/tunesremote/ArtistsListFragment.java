@@ -52,11 +52,6 @@ import android.widget.TextView;
 
 public class ArtistsListFragment extends ListFragment implements ConnectionListener, OnItemClickListener {
 
-   /*
-    * TODO: If we're not using the Alphabet scroller, remove all the references
-    * to the "nice" list, as it isn't required.
-    */
-
    public static final String TAG = ArtistsListFragment.class.toString();
 
    LibraryBrowseActivity host;
@@ -74,10 +69,9 @@ public class ArtistsListFragment extends ListFragment implements ConnectionListe
    public void onServiceConnected() {
       host = (LibraryBrowseActivity) getActivity();
       if (host != null) {
-         if (adapter == null)
-            adapter = new ArtistsAdapter(host);
-         adapter.results.clear();
-         host.library.readArtists(adapter);
+         if (adapter.results.isEmpty()) {
+            host.library.readArtists(adapter);
+         }
       } else {
          // Not quite ready, snooze for a bit
          try {
@@ -85,7 +79,6 @@ public class ArtistsListFragment extends ListFragment implements ConnectionListe
             onServiceConnected();
          } catch (InterruptedException e) {
             Log.d(TAG, "Waiting for Activity connection interrupted");
-            e.printStackTrace();
          }
       }
    }
@@ -188,11 +181,9 @@ public class ArtistsListFragment extends ListFragment implements ConnectionListe
       }
 
       public void foundTag(String tag, final Response resp) {
-         Log.d(TAG, "initial foundTag " + tag);
          if (resp == null) {
             return;
          }
-         Log.d(TAG, "foundTag " + tag);
 
          getActivity().runOnUiThread(new Runnable() {
 

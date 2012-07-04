@@ -73,31 +73,6 @@ public class AllAlbumsListFragment extends ListFragment implements ConnectionLis
    protected int imageSize = 66;
 
    @Override
-   public void onServiceConnected() {
-      host = (LibraryBrowseActivity) getActivity();
-      if (host != null) {
-         if (adapter == null)
-            adapter = new AlbumsAdapter(host);
-         adapter.results.clear();
-         host.library.readAlbums(adapter);
-      } else {
-         // Not quite ready, snooze for a bit
-         try {
-            Thread.sleep(500);
-            onServiceConnected();
-         } catch (InterruptedException e) {
-            Log.d(TAG, "Waiting for Activity connection interrupted");
-            e.printStackTrace();
-         }
-      }
-   }
-
-   @Override
-   public void onServiceDisconnected() {
-      // Nothing required
-   }
-
-   @Override
    public void onCreate(Bundle saved) {
       super.onCreate(saved);
 
@@ -105,6 +80,29 @@ public class AllAlbumsListFragment extends ListFragment implements ConnectionLis
          adapter = new AlbumsAdapter(getActivity());
       setListAdapter(adapter);
 
+   }
+
+   @Override
+   public void onServiceConnected() {
+      host = (LibraryBrowseActivity) getActivity();
+      if (host != null) {
+         if (adapter.results.isEmpty()) {
+            host.library.readAlbums(adapter);
+         }
+      } else {
+         // Not quite ready, snooze for a bit
+         try {
+            Thread.sleep(500);
+            onServiceConnected();
+         } catch (InterruptedException e) {
+            Log.d(TAG, "Waiting for Activity connection interrupted");
+         }
+      }
+   }
+
+   @Override
+   public void onServiceDisconnected() {
+      // Nothing required
    }
 
    @Override

@@ -48,13 +48,20 @@ public class PlaylistsFragment extends ListFragment implements ConnectionListene
    LibraryBrowseActivity host;
 
    @Override
+   public void onCreate(Bundle saved) {
+      super.onCreate(saved);
+      if (adapter == null)
+         adapter = new PlaylistsAdapter(getActivity(), resultsUpdated);
+      setListAdapter(adapter);
+   }
+
+   @Override
    public void onServiceConnected() {
       host = (LibraryBrowseActivity) getActivity();
       if (host != null) {
-         if (adapter == null)
-            adapter = new PlaylistsAdapter(host, resultsUpdated);
-         adapter.results.clear();
-         host.library.readPlaylists(adapter);
+         if (adapter.results.isEmpty()) {
+            host.library.readPlaylists(adapter);
+         }
       } else {
          // Not quite ready, snooze for a bit
          try {
@@ -69,15 +76,6 @@ public class PlaylistsFragment extends ListFragment implements ConnectionListene
 
    @Override
    public void onServiceDisconnected() {
-   }
-
-   @Override
-   public void onCreate(Bundle saved) {
-      super.onCreate(saved);
-      if (adapter == null)
-         adapter = new PlaylistsAdapter(getActivity(), resultsUpdated);
-      setListAdapter(adapter);
-
    }
 
    @Override
