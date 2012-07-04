@@ -156,7 +156,8 @@ public class TracksActivity extends BaseBrowseActivity {
 
       DisplayMetrics outMetrics = new DisplayMetrics();
       getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
-      if (outMetrics.heightPixels > 600) {
+      Log.w(TAG, "Screen Height and Width = " + outMetrics.heightPixels + " x " + outMetrics.widthPixels);
+      if (outMetrics.heightPixels > 800) {
          // Tablet config, with 200dip imageView
          coverSize = outMetrics.densityDpi * 300;
          if (coverSize > 600) {
