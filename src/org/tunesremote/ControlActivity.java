@@ -906,6 +906,9 @@ public class ControlActivity extends Activity {
    protected void checkCachedVolume() {
       // try assuming a cached volume instead of requesting it each time
       if (System.currentTimeMillis() - cachedTime > CACHE_TIME) {
+         if (status == null) {
+            return;
+         }
          this.cachedVolume = status.getVolume();
          this.cachedTime = System.currentTimeMillis();
       }
@@ -1024,7 +1027,15 @@ public class ControlActivity extends Activity {
       @Override
       public void run() {
          try {
+            if (status == null) {
+               return;
+            }
+
             speakers = status.getSpeakers();
+
+            if (speakers == null) {
+               return;
+            }
             if (mSpeakersItem != null)
                mSpeakersItem.setVisible(speakers.size() > 1);
          } catch (Exception e) {
