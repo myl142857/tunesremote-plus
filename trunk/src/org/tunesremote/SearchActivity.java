@@ -71,11 +71,15 @@ import android.widget.TextView;
 public class SearchActivity extends Activity {
 
    public final static String TAG = SearchActivity.class.toString();
+   public final static int FORCE_TOP = 2, REMOVE_FOOTER = 3, NO_RESULTS_FOUND = 4;
 
    protected BackendService backend;
    protected Session session;
    protected Library library;
    protected String query;
+   protected ListView list;
+   protected SearchAdapter adapter;
+   protected Bitmap blank;
 
    public ServiceConnection connection = new ServiceConnection() {
       public void onServiceConnected(ComponentName className, final IBinder service) {
@@ -114,12 +118,14 @@ public class SearchActivity extends Activity {
       }
    };
 
-   public final static int FORCE_TOP = 2, REMOVE_FOOTER = 3, NO_RESULTS_FOUND = 4;
-
    public Handler resultsUpdated = new Handler() {
       @Override
       public void handleMessage(Message msg) {
          Log.d(TAG, String.format("MSG: % d", msg.what));
+         if (list == null || adapter == null) {
+            return;
+         }
+
          switch (msg.what) {
          case FORCE_TOP:
             list.setSelection(0);
@@ -142,9 +148,6 @@ public class SearchActivity extends Activity {
       }
    };
 
-   protected ListView list;
-   protected SearchAdapter adapter;
-
    @Override
    public void onStart() {
       super.onStart();
@@ -157,9 +160,6 @@ public class SearchActivity extends Activity {
       super.onStop();
       try {
          this.unbindService(connection);
-
-         // make sure that we release usertask
-         // UserTask.resume();
          synchronized (adapter.scrollWait) {
             adapter.scrolling = false;
             adapter.scrollWait.notifyAll();
@@ -170,8 +170,6 @@ public class SearchActivity extends Activity {
 
    }
 
-   protected Bitmap blank;
-
    @Override
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
@@ -179,7 +177,6 @@ public class SearchActivity extends Activity {
 
       this.list = (ListView) this.findViewById(android.R.id.list);
       this.query = this.getIntent().getStringExtra(SearchManager.QUERY);
-      // this.query = "jes";
 
       // store search in recent history
       SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, RecentProvider.AUTHORITY,
@@ -192,7 +189,6 @@ public class SearchActivity extends Activity {
 
       // perform search based on incoming string
       // also have an adapter that paginates results
-
       this.list.setOnItemClickListener(new OnItemClickListener() {
          public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             // launch off event to play this search result
@@ -200,7 +196,6 @@ public class SearchActivity extends Activity {
                session.controlPlaySearch(query, position);
             setResult(RESULT_OK);
             finish();
-
          }
       });
 
@@ -364,16 +359,6 @@ public class SearchActivity extends Activity {
          } catch (Exception e) {
             Log.d(TAG, String.format("onCreate Error: %s", e.getMessage()));
          }
-
-         /*
-          * mlit --+ mikd 1 02 == 2 asal 11 B Collision asar 18 David Crowder
-          * Band miid 4 00000d96 == 3478 minm 59 Be Lifted Or Hope Rising
-          * (w/Shane & Shane/Robbie Seay Band)
-          */
-
-         // inflate views as needed
-         // fetch more results if paginating item requested, and if more
-         // exist
 
          return convertView;
 
