@@ -56,43 +56,38 @@ public class RequestHelper {
       // doesnt seem to listen to &sort=name
       String encodedSearch = Library.escapeUrlString(search);
       return request(
-               String
-                        .format(
-                                 "%s/databases/%d/containers/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum&type=music&include-sort-headers=1&query=(('com.apple.itunes.mediakind:1','com.apple.itunes.mediakind:4','com.apple.itunes.mediakind:8')+('dmap.itemname:*%s*','daap.songartist:*%s*','daap.songalbum:*%s*'))&sort=name&index=%d-%d",
-                                 session.getRequestBase(), session.databaseId, session.musicId, session.sessionId,
-                                 encodedSearch, encodedSearch, encodedSearch, start, end), false);
+               String.format(
+                        "%s/databases/%d/containers/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum&type=music&include-sort-headers=1&query=(('com.apple.itunes.mediakind:1','com.apple.itunes.mediakind:4','com.apple.itunes.mediakind:8')+('dmap.itemname:*%s*','daap.songartist:*%s*','daap.songalbum:*%s*'))&sort=name&index=%d-%d",
+                        session.getRequestBase(), session.databaseId, session.musicId, session.sessionId,
+                        encodedSearch, encodedSearch, encodedSearch, start, end), false);
    }
 
    public static byte[] requestTracks(Session session, String albumid) throws Exception {
       // http://192.168.254.128:3689/databases/36/containers/113/items?session-id=1301749047&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query='daap.songalbumid:11624070975347817354'
       return request(
-               String
-                        .format(
-                                 "%s/databases/%d/containers/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query='daap.songalbumid:%s'",
-                                 session.getRequestBase(), session.databaseId, session.musicId, session.sessionId,
-                                 albumid), false);
+               String.format(
+                        "%s/databases/%d/containers/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query='daap.songalbumid:%s'",
+                        session.getRequestBase(), session.databaseId, session.musicId, session.sessionId, albumid),
+               false);
    }
 
    public static byte[] requestAlbums(Session session, int start, int end) throws Exception {
       // http://192.168.254.128:3689/databases/36/groups?session-id=1034286700&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist&type=music&group-type=albums&sort=artist&include-sort-headers=1
       return request(
-               String
-                        .format(
-                                 "%s/databases/%d/containers/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist&type=music&group-type=albums&sort=artist&include-sort-headers=1&index=%d-%d",
-                                 session.getRequestBase(), session.databaseId, session.musicId, session.sessionId,
-                                 start, end), false);
+               String.format(
+                        "%s/databases/%d/containers/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist&type=music&group-type=albums&sort=artist&include-sort-headers=1&index=%d-%d",
+                        session.getRequestBase(), session.databaseId, session.musicId, session.sessionId, start, end),
+               false);
    }
 
    public static byte[] requestPlaylists(Session session) throws Exception {
       // http://192.168.254.128:3689/databases/36/containers?session-id=1686799903&meta=dmap.itemname,dmap.itemcount,dmap.itemid,dmap.persistentid,daap.baseplaylist,com.apple.itunes.special-playlist,com.apple.itunes.smart-playlist,com.apple.itunes.saved-genius,dmap.parentcontainerid,dmap.editcommandssupported
       return request(
-               String
-                        .format(
-                                 "%s/databases/%d/containers?session-id=%s&meta=dmap.itemname,dmap.itemcount,dmap.itemid,dmap.persistentid,daap.baseplaylist,com.apple.itunes.special-playlist,com.apple.itunes.smart-playlist,com.apple.itunes.saved-genius,dmap.parentcontainerid,dmap.editcommandssupported",
-                                 session.getRequestBase(), session.databaseId, session.musicId, session.sessionId),
-               false);
+               String.format(
+                        "%s/databases/%d/containers?session-id=%s&meta=dmap.itemname,dmap.itemcount,dmap.itemid,dmap.persistentid,daap.baseplaylist,com.apple.itunes.special-playlist,com.apple.itunes.smart-playlist,com.apple.itunes.saved-genius,dmap.parentcontainerid,dmap.editcommandssupported",
+                        session.getRequestBase(), session.databaseId, session.musicId, session.sessionId), false);
    }
-   
+
    public static Response requestParsed(String url, boolean keepalive) throws Exception {
       Log.d(TAG, url);
       return ResponseParser.performParse(request(url, keepalive));
@@ -181,14 +176,25 @@ public class RequestHelper {
 
    public static Bitmap requestThumbnail(Session session, int itemid, String type) throws Exception {
       // http://192.168.254.128:3689/databases/38/items/2854/extra_data/artwork?session-id=788509571&revision-number=196&mw=55&mh=55
-      byte[] raw = request(String.format("%s/databases/%d/items/%d/extra_data/artwork?session-id=%s&mw=55&mh=55%s",
-               session.getRequestBase(), session.databaseId, itemid, session.sessionId, type), false);
-      return BitmapFactory.decodeByteArray(raw, 0, raw.length);
+      try {
+         byte[] raw = request(
+                  String.format("%s/databases/%d/items/%d/extra_data/artwork?session-id=%s&mw=55&mh=55%s",
+                           session.getRequestBase(), session.databaseId, itemid, session.sessionId, type), false);
+         return BitmapFactory.decodeByteArray(raw, 0, raw.length);
+      } catch (java.lang.OutOfMemoryError e) {
+         Log.w(TAG, "Bitmap OOM:" + e.getMessage());
+         return null;
+      }
    }
 
    public static Bitmap requestBitmap(String remote) throws Exception {
-      byte[] raw = request(remote, false);
-      return BitmapFactory.decodeByteArray(raw, 0, raw.length);
+      try {
+         byte[] raw = request(remote, false);
+         return BitmapFactory.decodeByteArray(raw, 0, raw.length);
+      } catch (java.lang.OutOfMemoryError e) {
+         Log.w(TAG, "Bitmap OOM:" + e.getMessage());
+         return null;
+      }
    }
 
 }

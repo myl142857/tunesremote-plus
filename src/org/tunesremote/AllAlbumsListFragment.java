@@ -128,9 +128,7 @@ public class AllAlbumsListFragment extends ListFragment implements ConnectionLis
 
    @Override
    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-
       try {
-
          host.getMenuInflater().inflate(R.menu.context_albums, menu);
          AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
          Response resp = (Response) adapter.getItem(info.position);
@@ -139,7 +137,6 @@ public class AllAlbumsListFragment extends ListFragment implements ConnectionLis
       } catch (Exception e) {
          Log.w(TAG, "onCreateContextMenu:" + e.getMessage());
       }
-
    }
 
    public Handler resultsUpdated = new Handler() {
