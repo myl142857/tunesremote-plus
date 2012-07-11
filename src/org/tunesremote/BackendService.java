@@ -59,25 +59,30 @@ public class BackendService extends Service {
       if (session == null) {
          // try finding last library opened by user
          this.lastaddress = prefs.getString(PREF_LASTADDR, null);
-         Log.d(TAG, String.format("tried looking for lastaddr=%s", lastaddress));
+
          if (this.lastaddress != null) {
             try {
+               Log.d(TAG, String.format("tried looking for lastaddr=%s", lastaddress));
                this.setLibrary(this.lastaddress, null, null);
             } catch (Exception e) {
                Log.w(TAG, "getSession:" + e.getMessage());
             }
          }
 
-         // SECOND, if session is still NULL try and loop through all known servers stopping at the first one connected
+         // SECOND, if session is still NULL try and loop through all known
+         // servers stopping at the first one connected
          if (session == null) {
             Cursor cursor = pairdb.fetchAllServers();
             try {
                cursor.moveToFirst();
                while (cursor.isAfterLast() == false) {
                   try {
-                     final String address = cursor.getString(cursor.getColumnIndexOrThrow(PairingDatabase.FIELD_PAIR_ADDRESS));
-                     final String library = cursor.getString(cursor.getColumnIndexOrThrow(PairingDatabase.FIELD_PAIR_LIBRARY));
-                     final String code = cursor.getString(cursor.getColumnIndexOrThrow(PairingDatabase.FIELD_PAIR_GUID));
+                     final String address = cursor.getString(cursor
+                              .getColumnIndexOrThrow(PairingDatabase.FIELD_PAIR_ADDRESS));
+                     final String library = cursor.getString(cursor
+                              .getColumnIndexOrThrow(PairingDatabase.FIELD_PAIR_LIBRARY));
+                     final String code = cursor
+                              .getString(cursor.getColumnIndexOrThrow(PairingDatabase.FIELD_PAIR_GUID));
                      this.setLibrary(address, library, code);
                      break;
                   } catch (Exception e) {
@@ -90,7 +95,7 @@ public class BackendService extends Service {
             }
          }
       }
-      
+
       return session;
 
    }
@@ -126,10 +131,11 @@ public class BackendService extends Service {
       }
 
       // save this ip address to help us start faster
-      Editor edit = prefs.edit();
-      edit.putString(PREF_LASTADDR, address);
-      edit.commit();
-
+      if (prefs != null) {
+         Editor edit = prefs.edit();
+         edit.putString(PREF_LASTADDR, address);
+         edit.commit();
+      }
    }
 
    @Override

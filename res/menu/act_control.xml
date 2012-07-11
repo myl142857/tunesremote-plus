@@ -10,7 +10,7 @@
             android:id="@+id/control_menu_speakers"
             android:icon="@android:drawable/ic_lock_silent_mode_off"
             android:title="@string/control_menu_speakers"
-            android:visible="false">
+            android:visible="true">
     </item>
     <item
             android:id="@+id/control_menu_add_library"

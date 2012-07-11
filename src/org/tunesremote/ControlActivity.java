@@ -25,6 +25,7 @@
 
 package org.tunesremote;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.tunesremote.daap.Response;
@@ -126,7 +127,7 @@ public class ControlActivity extends Activity {
    /**
     * List of available speakers
     */
-   protected List<Speaker> speakers;
+   protected final static List<Speaker> SPEAKERS = new ArrayList<Speaker>();
 
    /**
     * Instance of the speaker list adapter used in the speakers dialog
@@ -157,18 +158,17 @@ public class ControlActivity extends Activity {
 
                   } else {
                      // for some reason we are not correctly disposing of the
-                     // session
-                     // threads we create so we purge any existing ones before
-                     // creating a
-                     // new one
+                     // session threads we create so we purge any existing ones
+                     // before creating a new one
                      status = session.singletonStatus(statusUpdate);
                      status.updateHandler(statusUpdate);
 
                      // push update through to make sure we get updated
+                     statusUpdate.sendEmptyMessage(Status.UPDATE_SPEAKERS);
                      statusUpdate.sendEmptyMessage(Status.UPDATE_TRACK);
                   }
-               } catch (Exception e) {
-                  Log.e(TAG, "onServiceConnected:" + e.getMessage());
+               } catch (Throwable e) {
+                  Log.e(TAG, "onServiceConnected:" + e);
                }
             }
          });
@@ -260,6 +260,21 @@ public class ControlActivity extends Activity {
                if (fadeUpNew)
                   fadeview.keepAwake();
             }
+            break;
+         case Status.UPDATE_SPEAKERS:
+            ThreadExecutor.runTask(new Runnable() {
+               public void run() {
+                  try {
+                     if (status == null) {
+                        return;
+                     }
+                     status.getSpeakers(SPEAKERS);
+                  } catch (Exception e) {
+                     Log.e(TAG, "Speaker Exception:" + e.getMessage());
+                  }
+               }
+
+            });
             break;
          }
 
@@ -425,31 +440,40 @@ public class ControlActivity extends Activity {
       }
 
       public void onStopTrackingTouch(SeekBar seekBar) {
+         final int newVolume = seekBar.getProgress();
+         ThreadExecutor.runTask(new Runnable() {
+            public void run() {
+               try {
+                  // Volume of the loudest speaker
+                  int maxVolume = 0;
+                  // Volume of the second loudest speaker
+                  int secondMaxVolume = 0;
+                  for (Speaker speaker : SPEAKERS) {
+                     if (speaker.getAbsoluteVolume() > maxVolume) {
+                        secondMaxVolume = maxVolume;
+                        maxVolume = speaker.getAbsoluteVolume();
+                     } else if (speaker.getAbsoluteVolume() > secondMaxVolume) {
+                        secondMaxVolume = speaker.getAbsoluteVolume();
+                     }
+                  }
+                  // fetch the master volume if necessary
+                  checkCachedVolume();
+                  int formerVolume = speaker.getAbsoluteVolume();
+                  status.setSpeakerVolume(speaker.getId(), newVolume, formerVolume, maxVolume, secondMaxVolume,
+                           cachedVolume);
+                  speaker.setAbsoluteVolume(newVolume);
+               } catch (Exception e) {
+                  Log.e(TAG, "Speaker Exception:" + e.getMessage());
+               }
+            }
+
+         });
       }
 
       public void onStartTrackingTouch(SeekBar seekBar) {
       }
 
       public void onProgressChanged(SeekBar seekBar, int newVolume, boolean fromUser) {
-         if (fromUser) {
-            // Volume of the loudest speaker
-            int maxVolume = 0;
-            // Volume of the second loudest speaker
-            int secondMaxVolume = 0;
-            for (Speaker speaker : speakers) {
-               if (speaker.getAbsoluteVolume() > maxVolume) {
-                  secondMaxVolume = maxVolume;
-                  maxVolume = speaker.getAbsoluteVolume();
-               } else if (speaker.getAbsoluteVolume() > secondMaxVolume) {
-                  secondMaxVolume = speaker.getAbsoluteVolume();
-               }
-            }
-            // fetch the master volume if necessary
-            checkCachedVolume();
-            int formerVolume = speaker.getAbsoluteVolume();
-            status.setSpeakerVolume(speaker.getId(), newVolume, formerVolume, maxVolume, secondMaxVolume, cachedVolume);
-            speaker.setAbsoluteVolume(newVolume);
-         }
       }
    }
 
@@ -466,14 +490,14 @@ public class ControlActivity extends Activity {
       }
 
       public int getCount() {
-         if (speakers == null) {
+         if (SPEAKERS == null) {
             return 0;
          }
-         return speakers.size();
+         return SPEAKERS.size();
       }
 
       public Object getItem(int position) {
-         return speakers.get(position);
+         return SPEAKERS.get(position);
       }
 
       public long getItemId(int position) {
@@ -493,8 +517,18 @@ public class ControlActivity extends Activity {
             return;
          }
          speaker.setActive(active);
-         status.setSpeakers(speakers);
-         speakers = status.getSpeakers();
+
+         ThreadExecutor.runTask(new Runnable() {
+            public void run() {
+               try {
+                  status.setSpeakers(SPEAKERS);
+               } catch (Exception e) {
+                  Log.e(TAG, "Speaker Exception:" + e.getMessage());
+               }
+            }
+
+         });
+
          notifyDataSetChanged();
       }
 
@@ -519,7 +553,7 @@ public class ControlActivity extends Activity {
             /*************************************************************
              * Set view properties
              *************************************************************/
-            final Speaker speaker = speakers.get(position);
+            final Speaker speaker = SPEAKERS.get(position);
             nameTextview.setText(speaker.getName());
             speakerTypeTextView.setText(speaker.isLocalSpeaker() ? R.string.speakers_dialog_computer_speaker
                      : R.string.speakers_dialog_airport_express);
@@ -882,7 +916,6 @@ public class ControlActivity extends Activity {
             session.controlVolume(ControlActivity.this.cachedVolume);
             // update our volume gui and show
             runOnUiThread(new Runnable() {
-
                @Override
                public void run() {
                   try {
@@ -893,11 +926,9 @@ public class ControlActivity extends Activity {
                      Log.e(TAG, "Volume Increment Exception:" + e.getMessage());
                   }
                }
-
             });
          }
       });
-
    }
 
    /**
@@ -994,54 +1025,10 @@ public class ControlActivity extends Activity {
       case R.id.control_menu_about:
          startActivity(new Intent(this, WizardActivity.class));
          return true;
-
       }
 
       return super.onOptionsItemSelected(item);
 
    }
 
-   @Override
-   public boolean onPrepareOptionsMenu(Menu menu) {
-      super.onPrepareOptionsMenu(menu);
-
-      if (session == null || status == null)
-         return true;
-      MenuItem speakersMenuItem = menu.findItem(R.id.control_menu_speakers);
-
-      // Determine whether the speakers menu item shall be visible
-      ThreadExecutor.runTask(new SpeakersRunnable(speakersMenuItem));
-
-      return true;
-   }
-
-   public class SpeakersRunnable implements Runnable {
-
-      MenuItem mSpeakersItem;
-
-      public SpeakersRunnable(MenuItem speakersItem) {
-         super();
-         mSpeakersItem = speakersItem;
-      }
-
-      @Override
-      public void run() {
-         try {
-            if (status == null) {
-               return;
-            }
-
-            speakers = status.getSpeakers();
-
-            if (speakers == null) {
-               return;
-            }
-            if (mSpeakersItem != null)
-               mSpeakersItem.setVisible(speakers.size() > 1);
-         } catch (Exception e) {
-            Log.e(TAG, "Speaker Exception:" + e.getMessage());
-         }
-      }
-
-   }
 }

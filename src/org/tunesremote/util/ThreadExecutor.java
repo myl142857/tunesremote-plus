@@ -50,10 +50,10 @@ public class ThreadExecutor {
       private final AtomicInteger mCount = new AtomicInteger(1);
 
       public Thread newThread(Runnable r) {
-         final String threadName = "ThreadExecutor #" + mCount.getAndIncrement();
+         final String threadName = "TunesRemote #" + mCount.getAndIncrement();
          Log.d(TAG, String.format("Creating Thread: %s", threadName));
          final Thread thread = new Thread(r, threadName);
-         Process.setThreadPriority(Process.THREAD_PRIORITY_LOWEST);
+         Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
          return thread;
       }
    };
@@ -61,8 +61,8 @@ public class ThreadExecutor {
             KEEP_ALIVE, TimeUnit.SECONDS, sWorkQueue, sThreadFactory);
 
    public static void runTask(Runnable task) {
+      Log.d(TAG, String.format("Run Executor Task = %d", sWorkQueue.size()));
       sExecutor.execute(task);
-      Log.d(TAG, String.format("Task count = %d", sWorkQueue.size()));
    }
 
 }
