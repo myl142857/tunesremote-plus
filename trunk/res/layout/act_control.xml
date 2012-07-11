@@ -54,9 +54,10 @@
 			<TextView  
 				android:id="@+id/info_title"
 				android:layout_width="fill_parent" 
-				android:layout_height="wrap_content" 
+				android:layout_height="fill_parent" 
 				android:textStyle="bold"
-				android:textAppearance="?android:attr/textAppearanceLarge"
+                android:ellipsize="end"
+				android:textAppearance="?android:attr/textAppearanceMedium"
 				/>
 			
 			<TextView  

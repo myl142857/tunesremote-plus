@@ -83,8 +83,10 @@ public class LibraryBrowseActivity extends FragmentActivity implements ViewPager
          ThreadExecutor.runTask(new Runnable() {
 
             public void run() {
-
                backend = ((BackendService.BackendBinder) service).getService();
+               if (backend == null)
+                  return;
+
                session = backend.getSession();
 
                if (session == null)
@@ -97,9 +99,7 @@ public class LibraryBrowseActivity extends FragmentActivity implements ViewPager
                   for (ConnectionListener l : listeners)
                      l.onServiceConnected();
                isConnected = true;
-
             }
-
          });
       }
 

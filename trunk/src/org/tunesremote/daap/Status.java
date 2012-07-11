@@ -25,7 +25,6 @@
 
 package org.tunesremote.daap;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -60,6 +59,7 @@ public class Status {
    public final static int UPDATE_TRACK = 4;
    public final static int UPDATE_COVER = 5;
    public final static int UPDATE_RATING = 6;
+   public static final int UPDATE_SPEAKERS = 7;
    private final static int MAX_FAILURES = 10;
 
    /**
@@ -405,23 +405,16 @@ public class Status {
                            session.getRequestBase(), session.sessionId), false);
          return resp.getNested("cmgt").getNumberLong("cmvo");
       } catch (Exception e) {
-         e.printStackTrace();
+         Log.e(TAG, "Fetch Volume Exception:" + e.getMessage());
       }
       return -1;
-
-      /*
-       * cmgt --+ mstt 4 000000c8 == 200 cmvo 4 00000054 == 84
-       */
    }
 
    /**
     * Reads the list of available speakers
     * @return list of available speakers
     */
-   public List<Speaker> getSpeakers() {
-
-      List<Speaker> speakers = new ArrayList<Speaker>();
-
+   public List<Speaker> getSpeakers(final List<Speaker> speakers) {
       try {
          Log.d(TAG, "getSpeakers() requesting...");
 
@@ -433,11 +426,13 @@ public class Status {
          Response response = ResponseParser.performParse(raw);
 
          Response casp = response.getNested("casp");
+         if (casp != null) {
+            speakers.clear();
+         }
 
          List<Response> mdclArray = casp.findArray("mdcl");
 
-         // The master volume is required to compute the speakers' absolute
-         // volume
+         // Master volume is required to compute the speakers' absolute volume
          long masterVolume = getVolume();
 
          for (Response mdcl : mdclArray) {
@@ -457,6 +452,13 @@ public class Status {
 
       } catch (Exception e) {
          Log.e(TAG, "Could not get speakers: ", e);
+         speakers.clear();
+         Speaker speaker = new Speaker();
+         speaker.setName("Computer");
+         speaker.setId(1);
+         speaker.setActive(true);
+         speaker.setAbsoluteVolume(50);
+         speakers.add(speaker);
       }
 
       return speakers;
