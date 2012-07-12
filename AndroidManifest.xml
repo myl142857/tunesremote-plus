@@ -46,7 +46,7 @@
 
         <activity
                 android:name=".ControlActivity"
-                android:configChanges="keyboardHidden|orientation">
+                android:configChanges="keyboardHidden|screenSize|orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -55,34 +55,31 @@
         </activity>
         <activity
                 android:name=".LibraryActivity"
-                android:configChanges="keyboardHidden|orientation"/>
+                android:configChanges="keyboardHidden|screenSize|orientation"/>
         <activity
                 android:name=".LibraryBrowseActivity"
-                android:configChanges="keyboardHidden|orientation"/>
+                android:configChanges="keyboardHidden|screenSize|orientation"/>
         <activity
                 android:name=".PairingActivity"
                 android:theme="@android:style/Theme.Dialog"/>
         <activity
                 android:name=".AlbumsActivity"
-                android:configChanges="keyboardHidden|orientation"/>
+                android:configChanges="keyboardHidden|screenSize|orientation"/>
         <activity
                 android:name=".TracksActivity"
-                android:configChanges="keyboardHidden|orientation"/>
+                android:configChanges="keyboardHidden|screenSize|orientation"/>
         <activity
                 android:name=".PlaylistsActivity"
-                android:configChanges="keyboardHidden|orientation"/>
-        <activity
-                android:name=".BrowseActivity"
-                android:configChanges="keyboardHidden|orientation"/>
+                android:configChanges="keyboardHidden|screenSize|orientation"/>
         <activity
                 android:name=".PrefsActivity"
-                android:configChanges="keyboardHidden|orientation"/>
+                android:configChanges="keyboardHidden|screenSize|orientation"/>
         <activity
                 android:name=".WizardActivity"
-                android:configChanges="keyboardHidden|orientation"/>
+                android:configChanges="keyboardHidden|screenSize|orientation"/>
         <activity
                 android:name=".ServerActivity"
-                android:configChanges="keyboardHidden|orientation"/>
+                android:configChanges="keyboardHidden|screenSize|orientation"/>
 
         <provider
                 android:name=".util.RecentProvider"
@@ -94,7 +91,7 @@
 
         <activity
                 android:name=".SearchActivity"
-                android:configChanges="keyboardHidden|orientation"
+                android:configChanges="keyboardHidden|screenSize|orientation"
                 android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH"/>
@@ -109,7 +106,7 @@
         </activity>
         <activity
                 android:name=".NowPlayingActivity"
-                android:configChanges="keyboardHidden|orientation">
+                android:configChanges="keyboardHidden|screenSize|orientation">
         </activity>
     </application>
 
