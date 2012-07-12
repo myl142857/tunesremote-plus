@@ -48,7 +48,7 @@ public class BackendService extends Service {
 
    protected Session session = null;
    protected String lastaddress = null;
-   protected SharedPreferences prefs;
+   protected static SharedPreferences prefs;
    protected PairingDatabase pairdb;
    private final IBinder binder = new BackendBinder();
 
@@ -180,6 +180,9 @@ public class BackendService extends Service {
     * @param prefs The prefs to set.
     */
    public void setPrefs(SharedPreferences prefs) {
+      if (prefs == null) {
+         return;
+      }
       this.prefs = prefs;
    }
 

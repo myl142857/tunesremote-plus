@@ -68,8 +68,7 @@ public class PlaylistsFragment extends ListFragment implements ConnectionListene
             Thread.sleep(500);
             onServiceConnected();
          } catch (InterruptedException e) {
-            Log.d(TAG, "Waiting for Activity connection interrupted");
-            e.printStackTrace();
+            Log.e(TAG, "Waiting for Activity connection interrupted " + e);
          }
       }
    }
