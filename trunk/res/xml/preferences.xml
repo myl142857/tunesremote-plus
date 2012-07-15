@@ -23,80 +23,85 @@
     Copyright (C) 2008. Jeffrey Sharkey, http://jsharkey.org/
     All Rights Reserved. 
 -->
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <PreferenceCategory android:title="General Preferences">
+    <PreferenceCategory android:title="General Preferences" >
         <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="@string/pref_background"
-                android:summary="Keep background service running to speed up launch"
-                android:title="Stay connected in background"/>
+            android:defaultValue="false"
+            android:key="@string/pref_background"
+            android:summary="Keep background service running to speed up launch"
+            android:title="Stay connected in background" />
         <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="@string/pref_notify"
-                android:summary="Display a notification in the status bar"
-                android:title="Enable notification"/>
+            android:defaultValue="false"
+            android:key="@string/pref_notify"
+            android:summary="Display a notification in the status bar"
+            android:title="Enable notification" />
 
         <EditTextPreference
-                android:defaultValue="30"
-                android:key="@string/pref_searchmax"
-                android:numeric="integer"
-                android:summary="The maximum number of search results so not to crash your device on returning too many results from a large search"
-                android:title="Search Result Maximum"/>
+            android:defaultValue="30"
+            android:key="@string/pref_searchmax"
+            android:numeric="integer"
+            android:summary="The maximum number of search results so not to crash your device on returning too many results from a large search"
+            android:title="Search Result Maximum" />
         <EditTextPreference
-                android:defaultValue="5"
-                android:key="@string/pref_volumeincrement"
-                android:numeric="integer"
-                android:summary="Increase or decrease the volume by this amount when changing volume"
-                android:title="Volume Change Increment"/>
+            android:defaultValue="5"
+            android:key="@string/pref_volumeincrement"
+            android:numeric="integer"
+            android:summary="Increase or decrease the volume by this amount when changing volume"
+            android:title="Volume Change Increment" />
 
         <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="@string/pref_autopause"
-                android:summary="When calls or made or received have your player automatically pause, and resume after the call."
-                android:title="Pause music during calls"/>
+            android:defaultValue="false"
+            android:key="@string/pref_autopause"
+            android:summary="When calls or made or received have your player automatically pause, and resume after the call."
+            android:title="Pause music during calls" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="Interface settings">
+    <PreferenceCategory android:title="Interface settings" >
         <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="@string/pref_fade"
-                android:summary="After 5 seconds, fade the track details and hide them"
-                android:title="Fade track details"/>
+            android:defaultValue="true"
+            android:key="@string/pref_fade"
+            android:summary="After 5 seconds, fade the track details and hide them"
+            android:title="Fade track details" />
         <CheckBoxPreference
-                android:defaultValue="true"
-                android:dependency="@string/pref_fade"
-                android:key="@string/pref_fadeupnew"
-                android:summary="Show new details when track is changed"
-                android:title="Fade up on new track"/>
+            android:defaultValue="true"
+            android:dependency="@string/pref_fade"
+            android:key="@string/pref_fadeupnew"
+            android:summary="Show new details when track is changed"
+            android:title="Fade up on new track" />
         <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="@string/pref_showrating"
-                android:summary="Toggle whether to show the rating bar"
-                android:title="Show rating bar"/>
+            android:defaultValue="true"
+            android:key="@string/pref_showrating"
+            android:summary="Toggle whether to show the rating bar"
+            android:title="Show rating bar" />
         <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="@string/pref_showtoast"
-                android:summary="Creates a popup toast showing the current shuffle or repeat status when the corresponding button is pressed"
-                android:title="Toast for shuffle and repeat"/>
+            android:defaultValue="true"
+            android:key="@string/pref_showtoast"
+            android:summary="Creates a popup toast showing the current shuffle or repeat status when the corresponding button is pressed"
+            android:title="Toast for shuffle and repeat" />
         <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="@string/pref_vibrate"
-                android:summary="Give light vibration feedback when pausing or changing tracks"
-                android:title="Vibrate on controls"/>
+            android:defaultValue="true"
+            android:key="@string/pref_vibrate"
+            android:summary="Give light vibration feedback when pausing or changing tracks"
+            android:title="Vibrate on controls" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/pref_invertgestures"
+            android:summary="Invert the swipe gestures from the default &quot;page turn&quot; style"
+            android:title="Invert Gestures" />
 
         <ListPreference
-                android:defaultValue="fill"
-                android:entries="@array/art_selections"
-                android:entryValues="@array/art_selections_int"
-                android:key="@string/pref_cropimage_2"
-                android:summary="How the album cover fills the screen"
-                android:title="Display album cover"/>
+            android:defaultValue="fill"
+            android:entries="@array/art_selections"
+            android:entryValues="@array/art_selections_int"
+            android:key="@string/pref_cropimage_2"
+            android:summary="How the album cover fills the screen"
+            android:title="Display album cover" />
 
         <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="@string/pref_fullscreen"
-                android:summary="Hides the status bar while running"
-                android:title="Fullscreen"/>
+            android:defaultValue="true"
+            android:key="@string/pref_fullscreen"
+            android:summary="Hides the status bar while running"
+            android:title="Fullscreen" />
     </PreferenceCategory>
 
 </PreferenceScreen>
