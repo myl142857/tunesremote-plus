@@ -25,27 +25,25 @@
     All Rights Reserved.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="wrap_content">
-	<CheckBox android:id="@+id/speakerActiveCheckBox"
-		android:layout_height="wrap_content" android:layout_width="wrap_content"
-		android:padding="10dip" />
-	<LinearLayout android:layout_width="fill_parent"
-		android:padding="5dip" android:layout_height="wrap_content"
-		android:orientation="vertical">
-		<TextView android:id="@+id/speakerNameTextView"
-			android:paddingLeft="10dip" android:singleLine="true" android:text="Speaker Name"
-			android:textColor="@android:color/white"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:textStyle="bold" />
-		<TextView android:id="@+id/speakerTypeTextView"
-			android:paddingLeft="10dip" android:singleLine="true" android:text="Speaker Type"
-			android:textColor="@android:color/white"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:textAppearance="?android:attr/textAppearanceSmall" />
-		<SeekBar android:id="@+id/speakerVolumeBar" android:max="100"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:layout_gravity="center_vertical" android:paddingLeft="10dip"
-			android:paddingRight="10dip" />
-	</LinearLayout>
+              android:layout_width="fill_parent" android:layout_height="wrap_content">
+    <CheckBox android:id="@+id/speakerActiveCheckBox"
+              android:layout_height="wrap_content" android:layout_width="wrap_content"
+              android:padding="10dip"/>
+    <LinearLayout android:layout_width="fill_parent"
+                  android:padding="5dip" android:layout_height="wrap_content"
+                  android:orientation="vertical">
+        <TextView android:id="@+id/speakerNameTextView"
+                  android:paddingLeft="10dip" android:singleLine="true" android:text="Speaker Name"
+                  android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:textAppearance="?android:attr/textAppearanceMedium"
+                  android:textStyle="bold"/>
+        <TextView android:id="@+id/speakerTypeTextView"
+                  android:paddingLeft="10dip" android:singleLine="true" android:text="Speaker Type"
+                  android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:textAppearance="?android:attr/textAppearanceSmall"/>
+        <SeekBar android:id="@+id/speakerVolumeBar" android:max="100"
+                 android:layout_width="fill_parent" android:layout_height="wrap_content"
+                 android:layout_gravity="center_vertical" android:paddingLeft="10dip"
+                 android:paddingRight="10dip"/>
+    </LinearLayout>
 </LinearLayout>

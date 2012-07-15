@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
             android:id="@+id/control_menu_artists"
@@ -23,6 +23,9 @@
             android:title="@string/control_menu_picklibrary">
     </item>
     <item
+            android:id="@+id/control_menu_local"
+            android:title="@string/control_menu_local"/>
+    <item
             android:id="@+id/control_menu_now_playing"
             android:title="@string/control_menu_nowplaying"
             android:icon="@drawable/ic_menu_playing"
@@ -32,7 +35,7 @@
             android:id="@+id/control_menu_search"
             android:icon="@android:drawable/ic_menu_search"
             android:title="@string/control_menu_search"
-            android:showAsAction="ifRoom" />
+            android:showAsAction="ifRoom"/>
     <item
             android:id="@+id/control_menu_settings"
             android:icon="@android:drawable/ic_menu_preferences"

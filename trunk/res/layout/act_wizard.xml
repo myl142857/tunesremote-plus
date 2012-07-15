@@ -26,45 +26,48 @@
 
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:gravity="right"
-	>
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:gravity="right"
+        >
 
-	<ViewFlipper
-		android:id="@+id/wizard_flipper"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:layout_weight="1"
-		/>
-		
-	<LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal" >
+    <ViewFlipper
+            android:id="@+id/wizard_flipper"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
 
-	    <Button
-	        android:id="@+id/action_prev"
-	        android:layout_width="0dp"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="1"
-	        android:drawableLeft="@drawable/ic_btn_back"
-	        android:gravity="center"
-	        android:padding="8dp"
-	        android:text="@string/cancel" />
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            style="@android:style/Holo.ButtonBar">
 
-	    <Button
-	        android:id="@+id/action_next"
-	        android:layout_width="0dp"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="1"
-	        android:drawableRight="@drawable/ic_btn_next"
-	        android:gravity="center"
-	        android:padding="8dp"
-	        android:text="Agree" />
+        <Button
+                android:id="@+id/action_prev"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_btn_back"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="@string/cancel"
+                style="@android:style/Widget.Holo.Button.Borderless"/>
 
-	</LinearLayout>
+        <Button
+                android:id="@+id/action_next"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableRight="@drawable/ic_btn_next"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="Agree"
+                style="@android:style/Widget.Holo.Button.Borderless"/>
+
+    </LinearLayout>
 
 </LinearLayout>
 
