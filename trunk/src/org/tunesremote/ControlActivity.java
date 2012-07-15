@@ -45,6 +45,12 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.gesture.Gesture;
+import android.gesture.GestureLibraries;
+import android.gesture.GestureLibrary;
+import android.gesture.GestureOverlayView;
+import android.gesture.Prediction;
+import android.gesture.GestureOverlayView.OnGesturePerformedListener;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -76,6 +82,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.RatingBar.OnRatingBarChangeListener;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -86,7 +93,7 @@ import android.widget.Toast;
  * other activities.
  * <p>
  */
-public class ControlActivity extends Activity {
+public class ControlActivity extends Activity implements OnGesturePerformedListener {
 
    public final static String TAG = ControlActivity.class.toString();
 
@@ -106,18 +113,22 @@ public class ControlActivity extends Activity {
    protected static Status status;
    protected String showingAlbumId = null;
    protected RatingBar ratingBar;
+   protected RelativeLayout ratingBox;
    protected TextView trackName, trackArtist, trackAlbum, seekPosition, seekRemain;
    protected SeekBar seekBar;
    protected ImageView coverImage;
    protected ImageButton controlPrev, controlPause, controlNext, controlShuffle, controlRepeat;
    protected View volume;
    protected ProgressBar volumeBar;
+   protected GestureOverlayView gestures;
    protected Toast volumeToast;
    protected FadeView fadeview;
    protected Toast shuffleToast;
    protected Toast repeatToast;
+   protected GestureLibrary gestureLib;
    protected boolean dragging = false, agreed = false, autoPause = false, stayConnected = false, fadeDetails = true,
-            fadeUpNew = true, vibrate = true, cropImage = true, fullScreen = true, ignoreNextTick = false;
+            fadeUpNew = true, vibrate = true, cropImage = true, fullScreen = true, ignoreNextTick = false, showRatingBox = true,
+            showToast = true, invertGestures = false;
    protected Vibrator vibrator;
    protected SharedPreferences prefs;
    protected long cachedTime = -1;
@@ -196,7 +207,9 @@ public class ControlActivity extends Activity {
             trackAlbum.setText(status.getTrackAlbum());
 
             // Set to invisible until rating is known
-            ratingBar.setVisibility(RatingBar.INVISIBLE);
+            //removed this to prevent rating bar flickering, this way the rating will just appear
+            //when it's known -chrisjdowd@gmail.com
+            //ratingBar.setVisibility(RatingBar.INVISIBLE);
 
             // fade new details up if requested
             if (fadeUpNew)
@@ -354,7 +367,10 @@ public class ControlActivity extends Activity {
       this.fadeUpNew = this.prefs.getBoolean(this.getString(R.string.pref_fadeupnew), this.fadeUpNew);
       this.vibrate = this.prefs.getBoolean(this.getString(R.string.pref_vibrate), this.vibrate);
       this.autoPause = this.prefs.getBoolean(this.getString(R.string.pref_autopause), this.autoPause);
-
+      this.showRatingBox = this.prefs.getBoolean(this.getString(R.string.pref_showrating), true);
+      this.showToast = this.prefs.getBoolean(this.getString(R.string.pref_showtoast), true);
+      this.invertGestures = this.prefs.getBoolean(getResources().getString(R.string.pref_invertgestures), false);
+      
       this.fadeview.allowFade = this.fadeDetails;
       this.fadeview.keepAwake();
 
@@ -609,6 +625,15 @@ public class ControlActivity extends Activity {
    @Override
    protected void onResume() {
       this.fullScreen = this.prefs.getBoolean(this.getString(R.string.pref_fullscreen), true);
+      this.showRatingBox = this.prefs.getBoolean(this.getString(R.string.pref_showrating), true);
+      this.showToast = this.prefs.getBoolean(getResources().getString(R.string.pref_showtoast), true);
+      this.invertGestures = this.prefs.getBoolean(getResources().getString(R.string.pref_invertgestures), false);
+      if(!showRatingBox){
+    	  ratingBox.setVisibility(View.GONE);
+      }
+      else{
+    	  ratingBox.setVisibility(View.VISIBLE);
+      }
       if (this.fullScreen) {
          getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
          getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
@@ -672,18 +697,33 @@ public class ControlActivity extends Activity {
       this.repeatToast = Toast.makeText(this, R.string.control_menu_repeat_none, Toast.LENGTH_SHORT);
       this.repeatToast.setGravity(Gravity.CENTER, 0, 0);
 
+      this.showToast = this.prefs.getBoolean(getResources().getString(R.string.pref_showtoast), true);
+
       // pull out interesting controls
       this.trackName = (TextView) findViewById(R.id.info_title);
       this.trackArtist = (TextView) findViewById(R.id.info_artist);
       this.trackAlbum = (TextView) findViewById(R.id.info_album);
       this.ratingBar = (RatingBar) findViewById(R.id.rating_bar);
-
+      this.ratingBox = (RelativeLayout) findViewById(R.id.rating_box);
+      this.showRatingBox = prefs.getBoolean(this.getString(R.string.pref_showrating), true);
+      if(!this.showRatingBox){
+    	  ratingBox.setVisibility(View.GONE);
+      }
+      
       this.coverImage = (ImageView) findViewById(R.id.cover);
       this.cropImage = this.prefs.getBoolean(this.getString(R.string.pref_cropimage), true);
       if (this.cropImage) {
          this.coverImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
       } else {
          this.coverImage.setScaleType(ImageView.ScaleType.FIT_XY);
+      }
+      
+      //gesture stuff
+      this.gestures = (GestureOverlayView) findViewById(R.id.control_gestures);
+      gestures.addOnGesturePerformedListener(this);
+      gestureLib = GestureLibraries.fromRawResource(this, R.raw.gestures);
+      if(!gestureLib.load()){
+    	  Toast.makeText(this, "Unable to load gestures", Toast.LENGTH_SHORT).show();
       }
 
       this.seekBar = (SeekBar) findViewById(R.id.seek);
@@ -858,7 +898,9 @@ public class ControlActivity extends Activity {
 
       }
 
-      repeatToast.show();
+      if(showToast){
+    	  repeatToast.show();
+      }
 
    }
 
@@ -902,7 +944,9 @@ public class ControlActivity extends Activity {
 
       }
 
-      shuffleToast.show();
+      if(showToast){
+    	  shuffleToast.show();
+      }
 
    }
 
@@ -1030,5 +1074,32 @@ public class ControlActivity extends Activity {
       return super.onOptionsItemSelected(item);
 
    }
+
+	@Override
+	public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
+		ArrayList<Prediction> predictions = gestureLib.recognize(gesture);
+		Prediction prediction = predictions.get(0);
+		if(session==null){
+			return;
+		}
+		if(predictions.size()>0 && prediction.score > 5.0){
+			if(prediction.name.equals("left")){
+				if(!invertGestures){
+					session.controlNext();
+				}
+				else{
+					session.controlPrev();
+				}
+			}
+			else if(prediction.name.equals("right")){
+				if(!invertGestures){
+					session.controlPrev();
+				}
+				else{
+					session.controlNext();
+				}
+			}
+		}		
+	}
 
 }
