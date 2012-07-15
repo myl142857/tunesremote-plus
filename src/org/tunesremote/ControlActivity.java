@@ -646,6 +646,14 @@ public class ControlActivity extends Activity implements
 	@SuppressLint("NewApi")
 	@Override
 	protected void onResume() {
+		this.showRatingBox = this.prefs.getBoolean(
+				this.getString(R.string.pref_showrating), true);
+		if(!this.showRatingBox){
+			this.ratingBox.setVisibility(View.GONE);
+		}
+		else{
+			this.ratingBox.setVisibility(View.VISIBLE);
+		}
 		this.fullScreen = this.prefs.getBoolean(
 				this.getString(R.string.pref_fullscreen), true);
 		if (this.fullScreen) {
@@ -743,7 +751,7 @@ public class ControlActivity extends Activity implements
 		if (!this.showRatingBox) {
 			ratingBox.setVisibility(View.GONE);
 		}
-
+		
 		// Speakers adapter needed for the speakers dialog
 		speakersAdapter = new SpeakersAdapter(this);
 	}
