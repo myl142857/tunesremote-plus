@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:padding="10dip">
+
+    <ImageView
+            android:id="@+id/notification_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:minWidth="48dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_notify"/>
+
+    <TextView
+            android:id="@+id/notification_title"
+            style="@style/NotificationTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/notification_icon"
+            android:layout_toLeftOf="@+id/notify_play"
+            android:layout_toRightOf="@+id/notification_icon"
+            android:text="Song"/>
+
+    <TextView
+            android:id="@+id/notification_text"
+            style="@style/NotificationText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/notification_title"
+            android:layout_below="@+id/notification_title"
+            android:layout_toLeftOf="@+id/notify_play"
+            android:text="Artist"/>
+
+    <ImageButton
+            android:id="@+id/notify_end"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@null"
+            android:src="@drawable/ic_cancel"/>
+
+    <ImageButton
+            android:id="@+id/notify_next"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@+id/notify_end"
+            android:layout_toLeftOf="@+id/notify_end"
+            android:background="@null"
+            android:minWidth="36dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/btn_next"/>
+
+    <ImageButton
+            android:id="@+id/notify_play"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@+id/notify_next"
+            android:layout_toLeftOf="@+id/notify_next"
+            android:background="@null"
+            android:minWidth="48dp"
+            android:src="@drawable/ic_notify_play"/>
+
+</RelativeLayout>

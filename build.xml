@@ -5,12 +5,12 @@
     <!-- The local.properties file is created and updated by the 'android' tool.
          It contains the path to the SDK. It should *NOT* be checked into
          Version Control Systems. -->
-    <property file="local.properties" />
+    <property file="local.properties"/>
 
     <!-- The ant.properties file can be created by you. It is only edited by the
          'android' tool to add properties to it.
          This is the place to change some Ant specific build properties.
-         Here are some properties you may want to change/update:
+         Here are some properties you may want to change/handlers:
 
          source.dir
              The name of the source directory. Default is 'src'.
@@ -21,13 +21,13 @@
          files in the SDK, at tools/ant/build.xml
 
          Properties related to the SDK location or the project target should
-         be updated using the 'android' tool with the 'update' action.
+         be updated using the 'android' tool with the 'handlers' action.
 
          This file is an integral part of the build system for your
          application and should be checked into Version Control Systems.
 
          -->
-    <property file="ant.properties" />
+    <property file="ant.properties"/>
 
     <!-- The project.properties file is created and updated by the 'android'
          tool, as well as ADT.
@@ -38,13 +38,13 @@
 
          This file is an integral part of the build system for your
          application and should be checked into Version Control Systems. -->
-    <loadproperties srcFile="project.properties" />
+    <loadproperties srcFile="project.properties"/>
 
     <!-- quick check on sdk.dir -->
     <fail
-            message="sdk.dir is missing. Make sure to generate local.properties using 'android update project' or to inject it through an env var"
+            message="sdk.dir is missing. Make sure to generate local.properties using 'android handlers project' or to inject it through an env var"
             unless="sdk.dir"
-    />
+            />
 
     <!--
         Import per project custom build rules if present at the root of the project.
@@ -59,8 +59,8 @@
             -pre-clean
     -->
 
-	
-    <import file="custom_rules.xml" optional="true" />
+
+    <import file="custom_rules.xml" optional="true"/>
 
     <!-- Import the actual build file.
 
@@ -77,10 +77,10 @@
          ***********************
          ****** IMPORTANT ******
          ***********************
-         In all cases you must update the value of version-tag below to read 'custom' instead of an integer,
-         in order to avoid having your file be overridden by tools such as "android update project"
+         In all cases you must handlers the value of version-tag below to read 'custom' instead of an integer,
+         in order to avoid having your file be overridden by tools such as "android handlers project"
     -->
     <!-- version-tag: custom -->
-    <import file="${sdk.dir}/tools/ant/build.xml" />
+    <import file="${sdk.dir}/tools/ant/build.xml"/>
 
 </project>
