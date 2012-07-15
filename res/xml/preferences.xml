@@ -25,34 +25,13 @@
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<CheckBoxPreference
-		android:key="@string/pref_background"
-		android:title="Stay connected in background"
-		android:summary="Keep background service running to speed up launch"
-		android:defaultValue="false"/>
+	<PreferenceCategory android:title="General Preferences"><CheckBoxPreference android:key="@string/pref_background" android:title="Stay connected in background" android:summary="Keep background service running to speed up launch" android:defaultValue="false" /><EditTextPreference android:summary="The maximum number of search results so not to crash your device on returning too many results from a large search" android:defaultValue="30" android:numeric="integer" android:title="Search Result Maximum" android:key="@string/pref_searchmax" /><EditTextPreference android:summary="Increase or decrease the volume by this amount when changing volume" android:defaultValue="5" android:numeric="integer" android:title="Volume Change Increment" android:key="@string/pref_volumeincrement" /><CheckBoxPreference android:summary="When calls or made or received have your player automatically pause, and resume after the call." android:defaultValue="false" android:title="Pause music during calls" android:key="@string/pref_autopause" /></PreferenceCategory>
     
-    <EditTextPreference
-                android:summary="The maximum number of search results so not to crash your device on returning too many results from a large search"
-                android:defaultValue="30"
-                android:numeric="integer"
-                android:title="Search Result Maximum"
-                android:key="@string/pref_searchmax" 
-                />
     
-    <EditTextPreference
-                android:summary="Increase or decrease the volume by this amount when changing volume"
-                android:defaultValue="5"
-                android:numeric="integer"
-                android:title="Volume Change Increment"
-                android:key="@string/pref_volumeincrement"
-                />
+    
+    
 		
-	<CheckBoxPreference
-				android:summary="When calls or made or received have your player automatically pause, and resume after the call."
-                android:defaultValue="false"
-                android:title="Pause music during calls"
-                android:key="@string/pref_autopause"
-                />
+	
                 
   <PreferenceCategory
 		android:title="Interface settings">
@@ -72,7 +51,7 @@
 			android:dependency="@string/pref_fade"
 			/>
 	
-		<CheckBoxPreference
+		<CheckBoxPreference android:key="@string/pref_showrating" android:summary="Toggle whether to show the rating bar" android:title="Show rating bar" android:defaultValue="true"/><CheckBoxPreference android:key="@string/pref_showtoast" android:summary="Creates a popup toast showing the current shuffle or repeat status when the corresponding button is pressed" android:title="Toast for shuffle and repeat" android:defaultValue="true" /><CheckBoxPreference
 			android:key="@string/pref_vibrate"
 			android:title="Vibrate on controls"
 			android:summary="Give light vibration feedback when pausing or changing tracks"
@@ -85,14 +64,18 @@
             android:summary="Crop album cover to fill the screen by scaling it"
             android:defaultValue="true"
             />
-       <CheckBoxPreference
+       <CheckBoxPreference android:key="@string/pref_invertgestures" android:summary='Inverts the gestures from the default "page turning" style to direct, i.e. wiping left would be previous song' android:title="Invert gestures" android:defaultValue="false" /><CheckBoxPreference
             android:key="@string/pref_fullscreen"
             android:title="Fullscreen"
             android:summary="Hides the status bar while running"
             android:defaultValue="true"
             />
+       
+       
+       
             
 		
 	</PreferenceCategory>
+  
 
 </PreferenceScreen>

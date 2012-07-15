@@ -119,4 +119,7 @@
   <string name="loading">Loading&#8230;</string>
   <string name="control_menu_library">Music Library</string>
   <string name="cancel">Cancel</string>
+  <string name="pref_showtoast">preftoast</string>
+  <string name="pref_invertgestures">invertgestures</string>
+  <string name="pref_showrating">showrating</string>
 </resources>
