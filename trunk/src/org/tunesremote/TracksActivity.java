@@ -32,6 +32,7 @@ import org.tunesremote.daap.Library;
 import org.tunesremote.daap.RequestHelper;
 import org.tunesremote.daap.Response;
 import org.tunesremote.daap.Session;
+import org.tunesremote.daap.Status;
 import org.tunesremote.util.ThreadExecutor;
 
 import android.content.ComponentName;
@@ -71,6 +72,7 @@ public class TracksActivity extends BaseBrowseActivity {
 	protected TracksAdapter adapter;
 	protected boolean allAlbums;
 	protected String artist, albumid, playlistId, playlistPersistentId;
+	protected int albumCoverId = 0;
 	protected int coverSize = 150;
 
 	public ServiceConnection connection = new ServiceConnection() {
@@ -96,6 +98,7 @@ public class TracksActivity extends BaseBrowseActivity {
 							library.readAllTracks(artist, adapter);
 						else {
 							library.readTracks(albumid, adapter);
+							TracksActivity.this.albumCoverId = getIntent().getIntExtra("miid", 0);
 							new LoadPhotoTask().execute(getIntent().getIntExtra("miid", 0));
 						}
 
@@ -199,8 +202,9 @@ public class TracksActivity extends BaseBrowseActivity {
 							TracksActivity.this.finish();
 						}
 						if (TracksActivity.this.playlistId != null) {
-							ControlActivity.status.setLastPlaylist(TracksActivity.this.playlistId, 
-									TracksActivity.this.playlistPersistentId);
+							Status.lastActivity = "playlist";
+							Status.lastPlaylistId = TracksActivity.this.playlistId;
+							Status.lastPlaylistPersistentId = TracksActivity.this.playlistPersistentId;
 							String containerItemId = resp.getNumberHex("mcti");
 							session.controlPlayPlaylist(TracksActivity.this.playlistPersistentId, containerItemId);
 							TracksActivity.this.setResult(RESULT_OK, new Intent());
@@ -211,6 +215,9 @@ public class TracksActivity extends BaseBrowseActivity {
 							TracksActivity.this.finish();
 						} else {
 							session.controlPlayAlbum(albumid, position);
+							String[] albumInfo = {albumid, resp.getString("minm"),Integer.toString(TracksActivity.this.albumCoverId),resp.getString("asaa")};
+							Status.lastActivity = "album";
+							Status.lastAlbum = albumInfo;
 							TracksActivity.this.setResult(RESULT_OK, new Intent());
 							TracksActivity.this.finish();
 						}
@@ -440,5 +447,12 @@ public class TracksActivity extends BaseBrowseActivity {
 			}
 		}
 	}
+
+	@Override
+	public void onBackPressed(){
+		Status.lastActivity = "";
+		super.onBackPressed();
+	}
+
 
 }

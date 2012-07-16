@@ -333,8 +333,8 @@ public class ControlActivity extends Activity implements
 				try {
 					Intent intent = new Intent(ControlActivity.this, TracksActivity.class);
 					intent.putExtra(Intent.EXTRA_TITLE,"");
-					intent.putExtra("Playlist", status.getLastPlaylistId());
-					intent.putExtra("PlaylistPersistentId", status.getLastPlaylistPersistentId());
+					intent.putExtra("Playlist", Status.lastPlaylistId);
+					intent.putExtra("PlaylistPersistentId", Status.lastPlaylistPersistentId);
 					intent.putExtra("AllAlbums", false);
 					ControlActivity.this.startActivity(intent);
 				}
@@ -1144,8 +1144,8 @@ public class ControlActivity extends Activity implements
 
 			case R.id.control_menu_now_playing:
 				String nppref = this.prefs.getString(this.getString(R.string.pref_nowplayingaction), "nowplaying");
-				if(ControlActivity.status.getLastPlaylistId()==""
-					|| ControlActivity.status.getLastPlaylistPersistentId() == ""
+				if(Status.lastPlaylistId == null
+					|| Status.lastPlaylistPersistentId == null
 					|| nppref.equals("nowplaying")){
 					StartNowPlaying();
 				}
@@ -1185,8 +1185,26 @@ public class ControlActivity extends Activity implements
 	
 	@Override
 	public void onBackPressed(){
-		//startActivity(new Intent(this, LibraryBrowseActivity.class));
-		super.onBackPressed();
+		//decide where we just came from (playlist or album)
+		if(Status.lastActivity==null){
+			Status.lastActivity = "close";
+		}
+		if(Status.lastActivity.equals("playlist")){
+			StartCurrentPlaylist();
+		}
+		else if(Status.lastActivity.equals("album")){
+			Intent intent = new Intent(this, TracksActivity.class);
+			intent.putExtra(Intent.EXTRA_TITLE, Status.lastAlbum[0]);
+			intent.putExtra("minm", Status.lastAlbum[1]);
+			intent.putExtra("miid", Integer.parseInt(Status.lastAlbum[2]));
+			intent.putExtra("Artist", Status.lastAlbum[3]);
+			intent.putExtra("AllAlbums", false);
+			ControlActivity.this.startActivity(intent);
+		}
+		else{
+			//didnt come from anywhere, finish() view
+			super.onBackPressed();
+		}
 	}
 
 	@Override
