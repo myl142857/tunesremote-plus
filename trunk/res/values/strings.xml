@@ -165,12 +165,15 @@
     </string>
     <string name="pref_nowplayingaction">nowplaying</string>
     <string-array name="pref_npvalues">
-        <item >nowplaying</item>
-        <item >playlist</item>
+        <item>nowplaying</item>
+        <item>playlist</item>
     </string-array>
     <string-array name="pref_npentries">
-        <item >Current Album</item>
-        <item >Selected Playlist</item>
+        <item>Current Album</item>
+        <item>Selected Playlist</item>
     </string-array>
+    <string name="track">Track</string>
+    <string name="artist">Artist</string>
+    <string name="album">Album</string>
 
 </resources>

@@ -99,7 +99,7 @@ public class ControlActivity extends Activity implements
 			fadeDetails = true, fadeUpNew = true,
 			vibrate = true, cropImage = true, fullScreen = true,
 			ignoreNextTick = false, showRatingBox = true, showToast = true,
-			invertGestures = false;
+			invertGestures = false, ignoreArtScale = false;
 	protected Vibrator vibrator;
 	protected SharedPreferences prefs;
 	protected long cachedTime = -1;
@@ -328,22 +328,22 @@ public class ControlActivity extends Activity implements
 	protected void StartCurrentPlaylist() {
 		if (status == null)
 			return;
-		ThreadExecutor.runTask(new Runnable(){
-			public void run(){
+		ThreadExecutor.runTask(new Runnable() {
+			public void run() {
 				try {
 					Intent intent = new Intent(ControlActivity.this, TracksActivity.class);
-					intent.putExtra(Intent.EXTRA_TITLE,"");
+					intent.putExtra(Intent.EXTRA_TITLE, "");
 					intent.putExtra("Playlist", Status.lastPlaylistId);
 					intent.putExtra("PlaylistPersistentId", Status.lastPlaylistPersistentId);
 					intent.putExtra("AllAlbums", false);
 					ControlActivity.this.startActivity(intent);
-				}
-				catch(Exception e){
+				} catch (Exception e) {
 					Log.e(TAG, "StartCurrentPlaylist:" + e.getMessage());
 				}
 			}
 		});
 	}
+
 	protected void StartNowPlaying() {
 		if (status == null)
 			return;
@@ -356,7 +356,7 @@ public class ControlActivity extends Activity implements
 					Intent intent = new Intent(ControlActivity.this,
 							NowPlayingActivity.class);
 					intent.putExtra(Intent.EXTRA_TITLE, status.getAlbumId());
-					ControlActivity.this.startActivity(intent);					
+					ControlActivity.this.startActivity(intent);
 				} catch (Exception e) {
 					Log.e(TAG, "StartNowPlaying:" + e.getMessage());
 				}
@@ -446,7 +446,7 @@ public class ControlActivity extends Activity implements
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		
+
 		if (resultCode == Activity.RESULT_OK) {
 			// yay they agreed, so store that info
 			Editor edit = prefs.edit();
@@ -657,10 +657,9 @@ public class ControlActivity extends Activity implements
 	protected void onResume() {
 		this.showRatingBox = this.prefs.getBoolean(
 				this.getString(R.string.pref_showrating), true);
-		if(!this.showRatingBox){
+		if (!this.showRatingBox) {
 			this.ratingBox.setVisibility(View.GONE);
-		}
-		else{
+		} else {
 			this.ratingBox.setVisibility(View.VISIBLE);
 		}
 		this.fullScreen = this.prefs.getBoolean(
@@ -674,15 +673,19 @@ public class ControlActivity extends Activity implements
 					WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		}
-		this.artScale = this.prefs.getString(
-				this.getString(R.string.pref_cropimage_2), "fill");
 
-		if (artScale.equals("fill"))
-			this.coverImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
-		else if (artScale.equals("crop"))
-			this.coverImage.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-		else
-			this.coverImage.setScaleType(ImageView.ScaleType.FIT_XY);
+		if (!ignoreArtScale) {
+
+			this.artScale = this.prefs.getString(
+					this.getString(R.string.pref_cropimage_2), "fill");
+			if (artScale.equals("fill"))
+				this.coverImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+			else if (artScale.equals("crop"))
+				this.coverImage.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+			else
+				this.coverImage.setScaleType(ImageView.ScaleType.FIT_XY);
+
+		} else coverImage.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 
 		super.onResume();
 	}
@@ -690,10 +693,24 @@ public class ControlActivity extends Activity implements
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
+
+		// Get any required properties & cancel fading before we
+		// re-do the layout
+		this.fadeview.fadeTimer.cancel();
+		boolean ratingVisible = ratingBar.getVisibility() == View.VISIBLE;
+
+		// Redo the layout
 		setContentView(R.layout.act_control);
 		initViews();
 
-		fadeview.keepAwake();
+		this.fadeview.allowFade = this.fadeDetails;
+		this.fadeview.keepAwake();
+
+		if (Helper.canUseApi(VERSION_CODES.HONEYCOMB))
+			getActionBar().show();
+
+		// Set properties for the new views
+		if (ratingVisible) ratingBar.setVisibility(View.VISIBLE);
 
 		// Push through an update to refresh everything
 		statusUpdate.sendEmptyMessage(Status.UPDATE_TRACK);
@@ -709,12 +726,12 @@ public class ControlActivity extends Activity implements
 		this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		this.agreed = prefs.getBoolean(EULA, false);
 		if (this.prefs.getBoolean(this.getString(R.string.pref_fullscreen),
-				true) && !Helper.isApiAboveOrEqual(VERSION_CODES.HONEYCOMB)) {
+				true) && !Helper.canUseApi(VERSION_CODES.HONEYCOMB)) {
 			// Can't use this above Honeycomb, hides the ActionBar making
 			// control impossible
 			this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		}
-		if (Helper.isApiAboveOrEqual(Build.VERSION_CODES.HONEYCOMB)) {
+		if (Helper.canUseApi(Build.VERSION_CODES.HONEYCOMB)) {
 			// Instead, make the ActionBar translucent
 			this.requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
 			getActionBar().setBackgroundDrawable(
@@ -754,13 +771,7 @@ public class ControlActivity extends Activity implements
 
 		// pull out interesting controls
 		initViews();
-		this.ratingBox = (RelativeLayout) findViewById(R.id.rating_box);
-		this.showRatingBox = prefs.getBoolean(
-				this.getString(R.string.pref_showrating), true);
-		if (!this.showRatingBox) {
-			ratingBox.setVisibility(View.GONE);
-		}
-		
+
 		// Speakers adapter needed for the speakers dialog
 		speakersAdapter = new SpeakersAdapter(this);
 	}
@@ -1025,6 +1036,16 @@ public class ControlActivity extends Activity implements
 		}
 		Status.screenHeight = largestDimen;
 
+		this.ratingBox = (RelativeLayout) findViewById(R.id.rating_box);
+		this.showRatingBox = prefs.getBoolean(
+				this.getString(R.string.pref_showrating), true);
+		if (!this.showRatingBox) {
+			ratingBox.setVisibility(View.GONE);
+		}
+
+		// A handy trick to see if we can ignore artScale options
+		ignoreArtScale = findViewById(R.id.isHorizStub) != null;
+
 		// Speakers adapter needed for the speakers dialog
 		speakersAdapter = new SpeakersAdapter(this);
 	}
@@ -1144,12 +1165,11 @@ public class ControlActivity extends Activity implements
 
 			case R.id.control_menu_now_playing:
 				String nppref = this.prefs.getString(this.getString(R.string.pref_nowplayingaction), "nowplaying");
-				if(Status.lastPlaylistId == null
-					|| Status.lastPlaylistPersistentId == null
-					|| nppref.equals("nowplaying")){
+				if (Status.lastPlaylistId == null
+						|| Status.lastPlaylistPersistentId == null
+						|| nppref.equals("nowplaying")) {
 					StartNowPlaying();
-				}
-				else{
+				} else {
 					StartCurrentPlaylist();
 				}
 				return true;
@@ -1182,17 +1202,16 @@ public class ControlActivity extends Activity implements
 		return super.onOptionsItemSelected(item);
 
 	}
-	
+
 	@Override
-	public void onBackPressed(){
+	public void onBackPressed() {
 		//decide where we just came from (playlist or album)
-		if(Status.lastActivity==null){
+		if (Status.lastActivity == null) {
 			Status.lastActivity = "close";
 		}
-		if(Status.lastActivity.equals("playlist")){
+		if (Status.lastActivity.equals("playlist")) {
 			StartCurrentPlaylist();
-		}
-		else if(Status.lastActivity.equals("album")){
+		} else if (Status.lastActivity.equals("album")) {
 			Intent intent = new Intent(this, TracksActivity.class);
 			intent.putExtra(Intent.EXTRA_TITLE, Status.lastAlbum[0]);
 			intent.putExtra("minm", Status.lastAlbum[1]);
@@ -1200,8 +1219,7 @@ public class ControlActivity extends Activity implements
 			intent.putExtra("Artist", Status.lastAlbum[3]);
 			intent.putExtra("AllAlbums", false);
 			ControlActivity.this.startActivity(intent);
-		}
-		else{
+		} else {
 			//didnt come from anywhere, finish() view
 			super.onBackPressed();
 		}

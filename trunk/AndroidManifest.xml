@@ -70,9 +70,6 @@
                 android:name=".TracksActivity"
                 android:configChanges="keyboardHidden|screenSize|orientation"/>
         <activity
-                android:name=".PlaylistsActivity"
-                android:configChanges="keyboardHidden|screenSize|orientation"/>
-        <activity
                 android:name=".PrefsActivity"
                 android:configChanges="keyboardHidden|screenSize|orientation"/>
         <activity

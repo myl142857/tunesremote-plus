@@ -45,6 +45,7 @@ import android.widget.TextView;
 import org.tunesremote.LibraryBrowseActivity.ConnectionListener;
 import org.tunesremote.daap.RequestHelper;
 import org.tunesremote.daap.Response;
+import org.tunesremote.util.Helper;
 
 import java.lang.ref.SoftReference;
 import java.text.Normalizer;
@@ -144,7 +145,7 @@ public class AllAlbumsListFragment extends ListFragment implements
 				setListShownNoAnimation(true);
 
 			getListView().setFastScrollEnabled(true);
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			if (Helper.canUseApi(Build.VERSION_CODES.HONEYCOMB)) {
 				getListView().setFastScrollAlwaysVisible(true);
 			}
 		}

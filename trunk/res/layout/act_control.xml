@@ -189,14 +189,13 @@
 
         <android.gesture.GestureOverlayView
                 android:id="@+id/control_gestures"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:layout_above="@id/rating_box"
                 android:layout_below="@id/info_box"
                 android:gestureColor="@android:color/transparent"
-                android:uncertainGestureColor="@android:color/transparent"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:uncertainGestureColor="@android:color/transparent">
         </android.gesture.GestureOverlayView>
-
     </org.tunesremote.FadeView>
 
 </RelativeLayout>
