@@ -4,7 +4,7 @@ import android.os.Build;
 
 public class Helper {
 
-	public static boolean isApiAboveOrEqual(int api) {
+	public static boolean canUseApi(int api) {
 		return Build.VERSION.SDK_INT >= api;
 	}
 

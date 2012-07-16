@@ -25,16 +25,6 @@
 
 package org.tunesremote;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import org.tunesremote.daap.Library;
-import org.tunesremote.daap.RequestHelper;
-import org.tunesremote.daap.Response;
-import org.tunesremote.daap.Session;
-import org.tunesremote.daap.Status;
-import org.tunesremote.util.ThreadExecutor;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -42,19 +32,11 @@ import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Message;
+import android.os.*;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.ContextMenu;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
+import android.view.*;
 import android.view.MenuItem.OnMenuItemClickListener;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -62,6 +44,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import org.tunesremote.daap.*;
+import org.tunesremote.util.ThreadExecutor;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class TracksActivity extends BaseBrowseActivity {
 
@@ -197,7 +184,7 @@ public class TracksActivity extends BaseBrowseActivity {
 						Response resp = (Response) adapter.getItem(position);
 						final long trackId = resp.getNumberLong("miid");
 						final long currentTrackId = ControlActivity.status.getTrackId();
-						if(trackId == currentTrackId){
+						if (trackId == currentTrackId) {
 							TracksActivity.this.setResult(RESULT_OK, new Intent());
 							TracksActivity.this.finish();
 						}
@@ -215,7 +202,7 @@ public class TracksActivity extends BaseBrowseActivity {
 							TracksActivity.this.finish();
 						} else {
 							session.controlPlayAlbum(albumid, position);
-							String[] albumInfo = {albumid, resp.getString("minm"),Integer.toString(TracksActivity.this.albumCoverId),resp.getString("asaa")};
+							String[] albumInfo = {albumid, resp.getString("minm"), Integer.toString(TracksActivity.this.albumCoverId), resp.getString("asaa")};
 							Status.lastActivity = "album";
 							Status.lastAlbum = albumInfo;
 							TracksActivity.this.setResult(RESULT_OK, new Intent());
@@ -415,7 +402,7 @@ public class TracksActivity extends BaseBrowseActivity {
 				// fetch the album cover from itunes
 				byte[] raw = RequestHelper.request(String.format(
 						"%s/databases/%d/groups/%d/extra_data/artwork?session-id=%s&mw=" + coverSize + "&mh=" + coverSize
-						+ "&group-type=albums", session.getRequestBase(), session.databaseId, params[0],
+								+ "&group-type=albums", session.getRequestBase(), session.databaseId, params[0],
 						session.sessionId), false);
 				bitmap = BitmapFactory.decodeByteArray(raw, 0, raw.length);
 
@@ -449,7 +436,7 @@ public class TracksActivity extends BaseBrowseActivity {
 	}
 
 	@Override
-	public void onBackPressed(){
+	public void onBackPressed() {
 		Status.lastActivity = "";
 		super.onBackPressed();
 	}

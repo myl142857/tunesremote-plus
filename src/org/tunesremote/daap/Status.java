@@ -1,22 +1,22 @@
 /*
     TunesRemote+ - http://code.google.com/p/tunesremote-plus/
-
+    
     Copyright (C) 2008 Jeffrey Sharkey, http://jsharkey.org/
     Copyright (C) 2010 TunesRemote+, http://code.google.com/p/tunesremote-plus/
-
+    
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-
+    
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-
+    
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+    
     The Initial Developer of the Original Code is Jeffrey Sharkey.
     Portions created by Jeffrey Sharkey are
     Copyright (C) 2008. Jeffrey Sharkey, http://jsharkey.org/
@@ -25,20 +25,19 @@
 
 package org.tunesremote.daap;
 
+import android.graphics.Bitmap;
+import android.os.Handler;
+import android.util.Log;
+import org.tunesremote.util.ThreadExecutor;
+
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.tunesremote.util.ThreadExecutor;
-
-import android.graphics.Bitmap;
-import android.os.Handler;
-import android.util.Log;
-
 /**
  * Status handles status information, including background timer thread also
  * subscribes to keep-alive event updates.
- * <p>
+ * <p/>
  */
 public class Status {
 
@@ -91,6 +90,7 @@ public class Status {
 
 	/**
 	 * Constructor accepts a Session and UI Handler to update the UI.
+	 *
 	 * @param session
 	 * @param update
 	 */
@@ -414,6 +414,7 @@ public class Status {
 
 	/**
 	 * Reads the list of available speakers
+	 *
 	 * @return list of available speakers
 	 */
 	public List<Speaker> getSpeakers(final List<Speaker> speakers) {
@@ -469,6 +470,7 @@ public class Status {
 
 	/**
 	 * Sets (activates or deactivates) the speakers as defined in the given list.
+	 *
 	 * @param speakers all speakers to read the active flag from
 	 */
 	public void setSpeakers(List<Speaker> speakers) {
@@ -505,15 +507,16 @@ public class Status {
 	 * Sets the volume of a single speaker. To recreate the behaviour of the
 	 * original iOS Remote App, there are some additional information required
 	 * because there is some hassle between relative and master volume.
-	 * @param speakerId ID of the speaker to set the volume of
-	 * @param newVolume the new volume to set
-	 * @param formerVolume the former volume of this speaker
+	 *
+	 * @param speakerId         ID of the speaker to set the volume of
+	 * @param newVolume         the new volume to set
+	 * @param formerVolume      the former volume of this speaker
 	 * @param speakersMaxVolume the maximum volume of all available speakers
-	 * @param secondMaxVolume the volume of the second loudest speaker
-	 * @param masterVolume the current master volume
+	 * @param secondMaxVolume   the volume of the second loudest speaker
+	 * @param masterVolume      the current master volume
 	 */
 	public void setSpeakerVolume(long speakerId, int newVolume, int formerVolume, int speakersMaxVolume,
-			int secondMaxVolume, long masterVolume) {
+	                             int secondMaxVolume, long masterVolume) {
 		try {
 			/*************************************************************
 			 * If this speaker will become or is currently the loudest or is the
@@ -550,7 +553,8 @@ public class Status {
 	 * parameters <code>setproperty?dmcp.volume=%d&include-speaker-id=%s</code>
 	 * which results in iTunes controlling the master volume and the selected
 	 * speaker synchronously.
-	 * @param speakerId ID of the speaker to control
+	 *
+	 * @param speakerId      ID of the speaker to control
 	 * @param absoluteVolume the volume to set absolutely
 	 * @throws Exception
 	 */
@@ -567,7 +571,8 @@ public class Status {
 	 * comparison to the master volume. For this the URL parameters
 	 * <code>%s/ctrl-int/1/setproperty?speaker-id=%s&dmcp.volume=%d</code> are
 	 * used.
-	 * @param speakerId ID of the speaker to control
+	 *
+	 * @param speakerId      ID of the speaker to control
 	 * @param relativeVolume the relative volume to set
 	 * @throws Exception
 	 */
