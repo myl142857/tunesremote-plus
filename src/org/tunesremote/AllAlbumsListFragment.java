@@ -199,8 +199,7 @@ public class AllAlbumsListFragment extends ListFragment implements
 			Intent intent = new Intent(host, TracksActivity.class);
 			intent.putExtra(Intent.EXTRA_TITLE, albumid);
 			intent.putExtra("minm", resp.getString("minm"));
-			intent.putExtra("miid", Long.valueOf(resp.getNumberLong("miid"))
-					.intValue());
+			intent.putExtra("miid", Long.valueOf(resp.getNumberLong("miid")).intValue());
 			intent.putExtra("Artist", resp.getString("asaa"));
 			intent.putExtra("AllAlbums", false);
 			startActivityForResult(intent, 1);
