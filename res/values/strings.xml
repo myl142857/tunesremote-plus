@@ -109,7 +109,6 @@
         having trouble, try cycling your Wifi, opening port 3689 in your firewall, or tapping Menu and Refresh.
     </string>
     <string name="toast_volume_title">Remote volume</string>
-    <string name="pref_background">background</string>
     <string name="pref_fade">fade</string>
     <string name="pref_fadeupnew">fadeupnew</string>
     <string name="pref_vibrate">vibrate</string>

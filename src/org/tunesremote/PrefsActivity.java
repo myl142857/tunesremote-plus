@@ -35,7 +35,6 @@ import android.preference.PreferenceActivity;
 public class PrefsActivity extends PreferenceActivity implements
 		Preference.OnPreferenceChangeListener {
 
-	CheckBoxPreference stayConn;
 	CheckBoxPreference notification;
 
 	String notifyExplain;
@@ -45,33 +44,17 @@ public class PrefsActivity extends PreferenceActivity implements
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
 
-		stayConn = (CheckBoxPreference) findPreference(getString(R.string.pref_background));
 		notification = (CheckBoxPreference) findPreference(getString(R.string.pref_notify));
-
-		if (stayConn.isChecked()) {
-			notification.setEnabled(false);
-			notification.setSummary(R.string.pref_notify_summary_disabled);
-		}
-		stayConn.setOnPreferenceChangeListener(this);
 		notification.setOnPreferenceChangeListener(this);
 
 	}
 
 	@Override
 	public boolean onPreferenceChange(Preference preference, Object o) {
-		if (preference.equals(stayConn)) {
-			boolean isStayConn = ((CheckBoxPreference) preference).isChecked();
-			notification.setEnabled(isStayConn);
-			notification
-					.setSummary(isStayConn ? R.string.pref_notify_summary_enabled
-							: R.string.pref_notify_summary_disabled);
-			return true;
-		} else {
-			if ((Boolean) o) {
-				showDialog(0);
-			}
-			return true;
+		if ((Boolean) o) {
+			showDialog(0);
 		}
+		return true;
 	}
 
 	@Override

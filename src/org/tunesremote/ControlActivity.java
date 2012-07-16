@@ -96,7 +96,7 @@ public class ControlActivity extends Activity implements
 	protected Toast repeatToast;
 	protected GestureLibrary gestureLib;
 	protected boolean dragging = false, agreed = false, autoPause = false,
-			stayConnected = false, fadeDetails = true, fadeUpNew = true,
+			fadeDetails = true, fadeUpNew = true,
 			vibrate = true, cropImage = true, fullScreen = true,
 			ignoreNextTick = false, showRatingBox = true, showToast = true,
 			invertGestures = false;
@@ -157,8 +157,7 @@ public class ControlActivity extends Activity implements
 									.sendEmptyMessage(Status.UPDATE_SPEAKERS);
 							statusUpdate.sendEmptyMessage(Status.UPDATE_TRACK);
 
-							if (settings.getBoolean("notification", false)
-									&& !stayConnected)
+							if (settings.getBoolean("notification", false))
 								ControlActivity.this.startService(new Intent(
 										ControlActivity.this,
 										NotificationService.class));
@@ -381,8 +380,6 @@ public class ControlActivity extends Activity implements
 	public void onStart() {
 		super.onStart();
 
-		this.stayConnected = this.prefs.getBoolean(
-				this.getString(R.string.pref_background), this.stayConnected);
 		this.fadeDetails = this.prefs.getBoolean(
 				this.getString(R.string.pref_fade), this.fadeDetails);
 		this.fadeUpNew = this.prefs.getBoolean(
@@ -403,16 +400,6 @@ public class ControlActivity extends Activity implements
 
 		Intent service = new Intent(this, BackendService.class);
 
-		if (this.stayConnected) {
-			// if were running background service, start now
-			this.startService(service);
-
-		} else {
-			// otherwise make sure we kill the static background service
-			this.stopService(service);
-
-		}
-
 		// regardless of stayConnected, were always going to need a bound
 		// backend
 		// for this activity
@@ -430,7 +417,7 @@ public class ControlActivity extends Activity implements
 		super.onStop();
 		Log.w(TAG, "Stopping TunesRemote...");
 		try {
-			if (!this.stayConnected && session != null) {
+			if (session != null) {
 				session.purgeSingletonStatus();
 			}
 

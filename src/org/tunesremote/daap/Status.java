@@ -654,26 +654,15 @@ public class Status {
    }
    
    public void setLastPlaylist(String plyId, String plyPersistId){
-	   Log.d("PENIS", plyId);
-	   Log.d("PENIS", plyPersistId);
 	   lastPlaylistId = plyId;
 	   lastPlaylistPersistentId = plyPersistId;
    }
    
    public String getLastPlaylistId(){
-	   if(lastPlaylistId!=null){
-		   return lastPlaylistId;
-	   }
-	   else{
-		   return "";
-	   }
+	   return lastPlaylistId;
    }
    public String getLastPlaylistPersistentId(){
-	   if(lastPlaylistPersistentId!=null){
-		   return lastPlaylistPersistentId;
-	   }
-	   else{
-		   return "";
-	   }
+	   return lastPlaylistPersistentId;
+
    }
 }
