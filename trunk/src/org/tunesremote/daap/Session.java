@@ -38,7 +38,7 @@ public class Session {
 	private final String host;
 	private Status singleton = null, notification = null;
 	public String sessionId;
-	public long databaseId, radioDatabaseId, musicId, libraryId;
+	public long databaseId, radioDatabaseId, musicId, libraryId; 
 	public String databasePersistentId, radioPersistentId;
 	public final List<Playlist> playlists = new LinkedList<Playlist>();
 

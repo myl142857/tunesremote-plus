@@ -102,6 +102,15 @@
             android:key="@string/pref_fullscreen"
             android:summary="Hides the status bar while running"
             android:title="Fullscreen" />
+        
+        <ListPreference 
+            android:title="Now Playing Action"
+            android:summary="Action to perform when the Now Playing button is pressed. Playlist defaults to Album if a playlist isn't selected."
+            android:key="@string/pref_nowplayingaction"
+            android:entries="@array/pref_npentries"
+            android:entryValues="@array/pref_npvalues"
+            android:defaultValue="nowplaying"
+            />
     </PreferenceCategory>
 
 </PreferenceScreen>

@@ -73,6 +73,7 @@ public class ControlActivity extends Activity implements
 	// keep volume cache for 10 seconds
 	public final static long CACHE_TIME = 10000;
 	public final static String EULA = "eula";
+	public final static int RESULT_CODE_NOWPLAYINGPLAYLIST = 100;
 
 	protected static BackendService backend;
 	protected static Session session;
@@ -325,6 +326,25 @@ public class ControlActivity extends Activity implements
 
 	};
 
+	protected void StartCurrentPlaylist() {
+		if (status == null)
+			return;
+		ThreadExecutor.runTask(new Runnable(){
+			public void run(){
+				try {
+					Intent intent = new Intent(ControlActivity.this, TracksActivity.class);
+					intent.putExtra(Intent.EXTRA_TITLE,"");
+					intent.putExtra("Playlist", status.getLastPlaylistId());
+					intent.putExtra("PlaylistPersistentId", status.getLastPlaylistPersistentId());
+					intent.putExtra("AllAlbums", false);
+					ControlActivity.this.startActivity(intent);
+				}
+				catch(Exception e){
+					Log.e(TAG, "StartCurrentPlaylist:" + e.getMessage());
+				}
+			}
+		});
+	}
 	protected void StartNowPlaying() {
 		if (status == null)
 			return;
@@ -337,7 +357,7 @@ public class ControlActivity extends Activity implements
 					Intent intent = new Intent(ControlActivity.this,
 							NowPlayingActivity.class);
 					intent.putExtra(Intent.EXTRA_TITLE, status.getAlbumId());
-					ControlActivity.this.startActivity(intent);
+					ControlActivity.this.startActivity(intent);					
 				} catch (Exception e) {
 					Log.e(TAG, "StartNowPlaying:" + e.getMessage());
 				}
@@ -353,6 +373,9 @@ public class ControlActivity extends Activity implements
 			StartNowPlaying();
 		}
 	};
+
+	private String playlistPersistentId;
+	private String playlistId;
 
 	@Override
 	public void onStart() {
@@ -436,7 +459,7 @@ public class ControlActivity extends Activity implements
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+		
 		if (resultCode == Activity.RESULT_OK) {
 			// yay they agreed, so store that info
 			Editor edit = prefs.edit();
@@ -447,7 +470,6 @@ public class ControlActivity extends Activity implements
 			// user didnt agree, so close
 			this.finish();
 		}
-
 	}
 
 	/**
@@ -755,6 +777,7 @@ public class ControlActivity extends Activity implements
 		// Speakers adapter needed for the speakers dialog
 		speakersAdapter = new SpeakersAdapter(this);
 	}
+
 
 	/**
 	 * Use to check the repeat status and button state, without altering it
@@ -1133,7 +1156,15 @@ public class ControlActivity extends Activity implements
 				return true;
 
 			case R.id.control_menu_now_playing:
-				StartNowPlaying();
+				String nppref = this.prefs.getString(this.getString(R.string.pref_nowplayingaction), "nowplaying");
+				if(ControlActivity.status.getLastPlaylistId()==""
+					|| ControlActivity.status.getLastPlaylistPersistentId() == ""
+					|| nppref.equals("nowplaying")){
+					StartNowPlaying();
+				}
+				else{
+					StartCurrentPlaylist();
+				}
 				return true;
 
 			case R.id.control_menu_settings:
@@ -1163,6 +1194,12 @@ public class ControlActivity extends Activity implements
 
 		return super.onOptionsItemSelected(item);
 
+	}
+	
+	@Override
+	public void onBackPressed(){
+		//startActivity(new Intent(this, LibraryBrowseActivity.class));
+		super.onBackPressed();
 	}
 
 	@Override
