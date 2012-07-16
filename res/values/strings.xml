@@ -164,5 +164,14 @@
     <string name="notify_dialog_explain">The notification allows you to control your music outside the app itself. To
         disconnect and hide the notification once you are done using it, press the cross at the right edge.
     </string>
+    <string name="pref_nowplayingaction">nowplaying</string>
+    <string-array name="pref_npvalues">
+        <item >nowplaying</item>
+        <item >playlist</item>
+    </string-array>
+    <string-array name="pref_npentries">
+        <item >Current Album</item>
+        <item >Selected Playlist</item>
+    </string-array>
 
 </resources>

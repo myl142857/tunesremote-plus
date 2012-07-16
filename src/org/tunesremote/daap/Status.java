@@ -82,6 +82,7 @@ public class Status {
    private Handler update = null;
    private final AtomicInteger failures = new AtomicInteger(0);
    private long revision = 1;
+   private static String lastPlaylistId = "", lastPlaylistPersistentId = "";
 
    // This is used to fetch higher quality covers on high DPI devices
    // Has to be initialised in ControlActivity
@@ -650,5 +651,29 @@ public class Status {
 
    public boolean isGeniusSelectable() {
       return this.geniusSelectable;
+   }
+   
+   public void setLastPlaylist(String plyId, String plyPersistId){
+	   Log.d("PENIS", plyId);
+	   Log.d("PENIS", plyPersistId);
+	   lastPlaylistId = plyId;
+	   lastPlaylistPersistentId = plyPersistId;
+   }
+   
+   public String getLastPlaylistId(){
+	   if(lastPlaylistId!=null){
+		   return lastPlaylistId;
+	   }
+	   else{
+		   return "";
+	   }
+   }
+   public String getLastPlaylistPersistentId(){
+	   if(lastPlaylistPersistentId!=null){
+		   return lastPlaylistPersistentId;
+	   }
+	   else{
+		   return "";
+	   }
    }
 }
