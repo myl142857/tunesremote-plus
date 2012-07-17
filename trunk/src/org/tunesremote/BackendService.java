@@ -183,7 +183,7 @@ public class BackendService extends Service {
       if (prefs == null) {
          return;
       }
-      this.prefs = prefs;
+      BackendService.prefs = prefs;
    }
 
 }
