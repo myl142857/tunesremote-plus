@@ -1,51 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-            android:id="@+id/control_menu_artists"
-            android:icon="@drawable/ic_menu_library"
-            android:title="@string/control_menu_library" android:showAsAction="ifRoom|withText">
+        android:id="@+id/control_menu_artists"
+        android:icon="@drawable/ic_menu_library"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/control_menu_library">
     </item>
     <item
-            android:id="@+id/control_menu_speakers"
-            android:icon="@android:drawable/ic_lock_silent_mode_off"
-            android:title="@string/control_menu_speakers"
-            android:visible="true">
+        android:id="@+id/control_menu_speakers"
+        android:icon="@android:drawable/ic_lock_silent_mode_off"
+        android:title="@string/control_menu_speakers"
+        android:visible="true">
     </item>
     <item
-            android:id="@+id/control_menu_add_library"
-            android:icon="@android:drawable/ic_menu_add"
-            android:title="@string/control_menu_addlibrary">
+        android:id="@+id/control_menu_add_library"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="@string/control_menu_addlibrary">
     </item>
     <item
-            android:id="@+id/control_menu_pick_library"
-            android:icon="@android:drawable/ic_menu_share"
-            android:title="@string/control_menu_picklibrary">
+        android:id="@+id/control_menu_pick_library"
+        android:icon="@android:drawable/ic_menu_share"
+        android:title="@string/control_menu_picklibrary">
     </item>
     <item
-            android:id="@+id/control_menu_local"
-            android:title="@string/control_menu_local"/>
-    <item
-            android:id="@+id/control_menu_now_playing"
-            android:title="@string/control_menu_nowplaying"
-            android:icon="@drawable/ic_menu_playing"
-            android:showAsAction="ifRoom|withText">
+        android:id="@+id/control_menu_now_playing"
+        android:icon="@drawable/ic_menu_playing"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/control_menu_nowplaying">
     </item>
     <item
-            android:id="@+id/control_menu_search"
-            android:icon="@android:drawable/ic_menu_search"
-            android:title="@string/control_menu_search"
-            android:showAsAction="ifRoom"/>
+        android:id="@+id/control_menu_search"
+        android:icon="@android:drawable/ic_menu_search"
+        android:showAsAction="ifRoom"
+        android:title="@string/control_menu_search"/>
     <item
-            android:id="@+id/control_menu_settings"
-            android:icon="@android:drawable/ic_menu_preferences"
-            android:title="@string/control_menu_settings">
+        android:id="@+id/control_menu_settings"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:title="@string/control_menu_settings">
     </item>
     <item
-            android:id="@+id/control_menu_about"
-            android:icon="@android:drawable/ic_menu_info_details"
-            android:title="@string/control_menu_about">
+        android:id="@+id/control_menu_about"
+        android:icon="@android:drawable/ic_menu_info_details"
+        android:title="@string/control_menu_about">
     </item>
-
+    <item
+        android:id="@+id/control_menu_local"
+        android:icon="@android:drawable/ic_menu_send"
+        android:title="@string/control_menu_local"/>
 
 </menu>
