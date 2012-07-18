@@ -72,21 +72,28 @@
     <string name="library_manual_neg">Cancel</string>
     <string name="tracks_empty">No tracks found\nfor this album.</string>
     <string name="pairing_title">Pairing with Library</string>
-    <string name="pairing_caption1">Your Android device is now in pairing mode, and should appear in your desktop/laptop media player. You\'ll need to enter a 4-digit code to finish the pairing process:
+    <string name="pairing_caption1">Your Android device is now in pairing mode, and should appear in your desktop/laptop
+        media player. You\'ll need to enter a 4-digit code to finish the pairing process:
     </string>
-    <string name="pairing_caption2">After entering the code on your desktop/laptop, this window should disappear. If you get stuck, just tap the back button to cancel.
+    <string name="pairing_caption2">After entering the code on your desktop/laptop, this window should disappear. If you
+        get stuck, just tap the back button to cancel.
     </string>
-    <string name="wizard_title1">TunesRemote+ 2.5.3 helps you remote control your DACP-compatible desktop or laptop media player, such as Apple iTunes\u2122,MonkeyTunes for MediaMonkey, and Telescope for Songbird.
+    <string name="wizard_title1">TunesRemote+ 2.5.3 helps you remote control your DACP-compatible desktop or laptop
+        media player, such as Apple iTunes\u2122,MonkeyTunes for MediaMonkey, and Telescope for Songbird.
     </string>
     <string name="wizard_title2">It lets you easily browse your albums, including full-text search from a distance.
     </string>
     <string name="wizard_eula">Before we get started, we need to get some legal information out of the
-        way:\n\nTunesRemote+ provides its service to you subject to the following conditions. You accept these conditions by using
+        way:\n\nTunesRemote+ provides its service to you subject to the following conditions. You accept these
+        conditions by using
         TunesRemote+.\n\nThis program and all information, content, materials, products and services included are
-        provided by TunesRemote+ on an \'as is\' basis without warranties or conditions of any kind.\n\nNeither TunesRemote+ nor its
+        provided by TunesRemote+ on an \'as is\' basis without warranties or conditions of any kind.\n\nNeither
+        TunesRemote+ nor its
         author will not be liable for any damages of any kind arising from the use of this program or from any
-        information,  content, materials, products or services made available through this program.\n\niTunes is a registered
-        trademark of Apple, Inc., registered in the U.S. and other countries. This program makes no claim to be either authorized or
+        information, content, materials, products or services made available through this program.\n\niTunes is a
+        registered
+        trademark of Apple, Inc., registered in the U.S. and other countries. This program makes no claim to be either
+        authorized or
         approved by Apple, Inc.
     </string>
     <string name="wizard_pos">Agree</string>
@@ -95,7 +102,8 @@
     <string name="dia_code">Pairing code</string>
     <string name="item_fetch">Fetching more search results&#8230;</string>
     <string name="item_network_title">Searching network for libraries&#8230;</string>
-    <string name="item_network_caption">Open server application and make sure you\'re on the same Wifi network. If having trouble, try cycling your Wifi, opening port 3689 in your firewall, or tapping Menu and Refresh.
+    <string name="item_network_caption">Open server application and make sure you\'re on the same Wifi network. If
+        having trouble, try cycling your Wifi, opening port 3689 in your firewall, or tapping Menu and Refresh.
     </string>
     <string name="toast_volume_title">Remote volume</string>
     <string name="pref_fade">fade</string>
@@ -147,9 +155,12 @@
     <string name="notify_next">Next</string>
     <string name="pref_showtoast">preftoast</string>
     <string name="pref_invertgestures">invertgestures</string>
+    <string name="pref_art_title">Album art display</string>
+    <string name="pref_art_summary">How album art fills the screen</string>
     <string name="pref_showrating">showrating</string>
     <string name="notify_dialog_title">Using notifications</string>
-    <string name="notify_dialog_explain">The notification allows you to control your music outside the app itself. To disconnect and hide the notification once you are done using it, press the cross at the right edge.
+    <string name="notify_dialog_explain">The notification allows you to control your music outside the app itself. To
+        disconnect and hide the notification once you are done using it, press the cross at the right edge.
     </string>
     <string name="pref_nowplayingaction">nowplaying</string>
     <string-array name="pref_npvalues">
