@@ -1,3 +1,4 @@
 <resources>
     <dimen name="action_bar_offset">56dip</dimen>
+    <bool name="isArtVariable">false</bool>
 </resources>

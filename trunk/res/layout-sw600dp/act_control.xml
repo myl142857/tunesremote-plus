@@ -69,8 +69,6 @@
                         android:id="@+id/control_prev"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="18dp"
-                        android:layout_marginRight="24dp"
                         android:layout_weight="1"
                         android:background="#00000000"
                         android:contentDescription="Previous track button"
@@ -82,7 +80,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="#00000000"
+                        android:background="@null"
                         android:contentDescription="Play/pause button"
                         android:minWidth="72dp"
                         android:src="@drawable/btn_pause"/>
@@ -91,7 +89,6 @@
                         android:id="@+id/control_next"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="24dp"
                         android:layout_weight="1"
                         android:background="#00000000"
                         android:contentDescription="Next track button"
@@ -113,7 +110,6 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentRight="true"
                     android:layout_below="@+id/linLayout1"
-                    android:layout_marginTop="12dp"
                     android:minHeight="72dp">
 
                 <LinearLayout
