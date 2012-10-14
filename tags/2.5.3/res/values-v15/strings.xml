@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="notify_dialog_explain">The notification allows you to control your music outside the app. It uses the
+        new Jelly Bean style notifications, so to show the play and next track buttons swipe with two fingers down on
+        the notification. To hide the notification and close the connection, swipe it away.
+    </string>
+
+</resources>

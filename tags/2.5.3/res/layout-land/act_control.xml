@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    TunesRemote+ - http://code.google.com/p/tunesremote-plus/
+    
+    Copyright (C) 2008 Jeffrey Sharkey, http://jsharkey.org/
+    Copyright (C) 2010 TunesRemote+, http://code.google.com/p/tunesremote-plus/
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    The Initial Developer of the Original Code is Jeffrey Sharkey.
+    Portions created by Jeffrey Sharkey are
+    Copyright (C) 2008. Jeffrey Sharkey, http://jsharkey.org/
+    All Rights Reserved.
+-->
+<org.tunesremote.FadeView xmlns:android="http://schemas.android.com/apk/res/android"
+                          android:id="@+id/fadeview"
+                          android:layout_width="fill_parent"
+                          android:layout_height="fill_parent"
+                          android:layout_weight="1">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:baselineAligned="false">
+
+        <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+            <ViewStub
+                    android:id="@+id/isHorizStub"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            <android.gesture.GestureOverlayView
+                    android:id="@+id/control_gestures"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_above="@+id/control_box"
+                    android:layout_alignRight="@+id/cover"
+                    android:gestureColor="@android:color/transparent"
+                    android:uncertainGestureColor="@android:color/transparent">
+            </android.gesture.GestureOverlayView>
+
+            <org.tunesremote.SquareCover
+                    android:id="@+id/cover"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:scaleType="fitXY"/>
+
+            <LinearLayout
+                    android:id="@+id/control_box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="false"
+                    android:layout_alignRight="@id/cover"
+                    android:background="#a000"
+                    android:minHeight="72dip"
+                    android:orientation="horizontal">
+
+                <ImageButton
+                        android:id="@+id/control_shuffle"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="#00000000"
+                        android:src="@drawable/btn_shuffle"/>
+
+                <ImageButton
+                        android:id="@+id/control_prev"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="#00000000"
+                        android:src="@drawable/btn_prev"/>
+
+                <ImageButton
+                        android:id="@+id/control_pause"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="#00000000"
+                        android:src="@drawable/btn_pause"/>
+
+                <ImageButton
+                        android:id="@+id/control_next"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="#00000000"
+                        android:src="@drawable/btn_next"/>
+
+                <ImageButton
+                        android:id="@+id/control_repeat"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="#00000000"
+                        android:src="@drawable/btn_repeat"/>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+                android:id="@+id/info_box"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/action_bar_offset"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="10dip">
+
+            <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/track"
+                    android:textAllCaps="true"
+                    android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+            <RelativeLayout
+                    android:id="@+id/seek_box"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center_vertical">
+
+                <SeekBar
+                        android:id="@+id/seek"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/rating_box"
+                        android:layout_toLeftOf="@+id/seek_remain"
+                        android:layout_toRightOf="@+id/seek_position"
+                        android:padding="5dip"/>
+
+                <TextView
+                        android:id="@+id/seek_position"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:minHeight="24dp"
+                        android:minWidth="24dp"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                <TextView
+                        android:id="@+id/seek_remain"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBaseline="@+id/seek_position"
+                        android:layout_alignBottom="@+id/seek_position"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:minHeight="24dp"
+                        android:minWidth="24dp"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:id="@+id/rating_box"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/seek_box"
+                    android:layout_alignLeft="@+id/seek_box"
+                    android:layout_alignParentRight="true"
+                    android:orientation="vertical">
+
+                <RatingBar
+                        android:id="@+id/rating_bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:numStars="5"
+                        android:stepSize="0.5"
+                        android:visibility="invisible"/>
+            </RelativeLayout>
+
+            <TextView
+                    android:id="@+id/info_title"
+                    style="@android:style/TextAppearance.Medium"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/textView1"
+                    android:layout_below="@+id/textView1"
+                    android:layout_marginBottom="4dp"
+                    android:ellipsize="end"
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+            <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/info_title"
+                    android:text="@string/artist"
+                    android:textAllCaps="true"
+                    android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+            <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/textView2"
+                    android:layout_below="@+id/info_artist"
+                    android:text="@string/album"
+                    android:textAllCaps="true"
+                    android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+            <TextView
+                    android:id="@+id/info_artist"
+                    style="@android:style/TextAppearance.Medium"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/info_title"
+                    android:layout_below="@+id/textView2"
+                    android:layout_marginBottom="4dp"/>
+
+            <TextView
+                    android:id="@+id/info_album"
+                    style="@android:style/TextAppearance.Medium"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/info_title"
+                    android:layout_below="@+id/textView3"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+</org.tunesremote.FadeView>
